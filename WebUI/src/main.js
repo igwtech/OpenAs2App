@@ -26,7 +26,8 @@ Vue.use(IconsPlugin)
 Vue.use(VueScreen, 'bootstrap');
 new Vue({
   el:'#app',
+  router,
   store,
-  render: h => h(App),
-  router
+  vuetify,
+  render: h => h(App)
 });
