@@ -332,6 +332,18 @@ export default {
   padding-top: 133px; /* Space for fixed navbar */
 }
 
+.v-text-field {
+  padding: 0;
+}
+
+.fixWidth {
+  max-width: 180px;
+}
+
+.selectableWidth {
+  max-width: 200px;
+}
+
 @media (min-width: 768px) {
   [role="main"] {
     padding-top: 48px; /* Space for fixed navbar */
