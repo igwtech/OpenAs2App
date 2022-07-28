@@ -29,7 +29,7 @@
             </b-input-group>
           </b-form-group>
         </b-col> -->
-        <b-col sm="12" md="4" class="my-1">
+        <b-col sm="12" md="4" class="">
           <b-form-group
             label="Per page"
             label-for="per-page-select"
@@ -39,6 +39,8 @@
             label-align-sm="right"
             label-size="sm"
             class="mb-0"
+            label-class="pt-4"
+
           >
             <b-form-select
               id="per-page-select"
@@ -48,7 +50,6 @@
             ></b-form-select>
           </b-form-group>
         </b-col>
-
         <b-col sm="12" md="8" class="my-1">
           <b-pagination
             v-model="currentPage"

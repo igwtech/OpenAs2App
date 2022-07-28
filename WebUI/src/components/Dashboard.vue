@@ -14,7 +14,6 @@
         border-bottom
       "
     >
-
       <h1 class="h2">Dashboard</h1>
     </div>
     <b-row>
@@ -26,8 +25,8 @@
           header="Total Partners"
           class="text-center mt-1"
         >
-          <b-card-text
-            > <b-row align-h="between">
+          <b-card-text>
+            <b-row align-h="between">
               <b-col> <b-icon icon="person" font-scale="3 "></b-icon></b-col>
               <b-col>
                 <h1>{{ countPartners }}</h1></b-col
@@ -56,46 +55,39 @@
       <b-col md="4">
         <b-card
           bg-variant="info"
-          text-variant="white" 
+          text-variant="white"
           header="Total Certificates"
           class="text-center mt-1"
         >
-          <b-card-text
-            >
+          <b-card-text>
             <b-row align-h="between">
-              <b-col> <b-icon icon="file-earmark-richtext" font-scale="3 "></b-icon></b-col>
               <b-col>
-                <h1>{{countCertificates  }}</h1></b-col
+                <b-icon icon="file-earmark-richtext" font-scale="3 "></b-icon
+              ></b-col>
+              <b-col>
+                <h1>{{ countCertificates }}</h1></b-col
               >
             </b-row>
-            </b-card-text
-          >
+          </b-card-text>
         </b-card>
       </b-col>
-      <!-- </b-card-group> -->
-      <b-row class="justify-content-md-center mt-3">
-        <b-col md="4">
-          <date-range-picker
-            @update="changeDate"
-            v-model="dateRange"
-            opens="left"
-          ></date-range-picker>
-        </b-col>
-      </b-row>
-      <!-- <b-col class="mt-3" :md="length < 15 ? '6' : '12'">
-        <chart-line-two
-          :labels="dates"
-          :messagesSent="messagesSent"
-          :messagesReceived="messagesReceived"
-          :messagesFailed="messagesFailed"
-        >
-        </chart-line-two>
-      </b-col> -->
-      <b-col class="mt-3" :md="dataChart['sent'].valuesX.length < 15 ? '6' : '12'">
-        <chart-line
-          :labels="dataChart['sent'].valuesX"
-          :datasets="allState"
-        >
+    </b-row>
+
+    <b-row align-h="center" class="mt-3">
+      <!-- <b-col md="4" sm="6"> -->
+        <date-range-picker
+          @update="changeDate"
+          v-model="dateRange"
+          :opens="$screen.width < 576?'center':'left'"
+        ></date-range-picker>
+      <!-- </b-col> -->
+    </b-row>
+    <b-row class="justify-content-md-center mt-3">
+      <b-col
+        class="mt-3"
+        :md="dataChart['sent'].valuesX.length < 15 ? '6' : '12'"
+      >
+        <chart-line :labels="dataChart['sent'].valuesX" :datasets="allState">
         </chart-line>
       </b-col>
       <b-col
@@ -111,7 +103,9 @@
         >
         </chart-bar>
       </b-col>
-      <messages-admin></messages-admin>
+      <b-col class="" md="12">
+        <messages-admin></messages-admin>
+      </b-col>
     </b-row>
   </div>
 </template>
@@ -145,7 +139,6 @@ export default {
           text: "Dashboard",
           to: { name: "Dashboard" },
           active: true,
-
         },
       ],
       length: 10,
@@ -315,8 +308,7 @@ export default {
         ini.add(1, "days");
       }
     },
-   
-    
+
     changeDate: function () {
       this.getListMessageChart();
     },

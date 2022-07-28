@@ -160,8 +160,8 @@
         </b-form-group>
       </template>
     </template>
-    <b-row>
-      <!-- <b-col col > -->
+    <b-row align-h="center" class="m-1">
+      <!-- <b-col > -->
       <b-button-group>
         <b-button :disabled="loading" type="submit" variant="success" size="sm">Save</b-button>
         <b-button :disabled="loading" @click="cancelForm" size="sm">Cancel</b-button>
@@ -231,7 +231,6 @@ export default {
         console.log("onfile");
         this.$emit("fileUpload",{file:oFile,e})
       }
-      // console.log("eeeee",e);
 
     },
   },

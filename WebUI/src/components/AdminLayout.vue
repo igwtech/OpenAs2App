@@ -14,7 +14,7 @@
     />
 
     <div class="">
-      <b-row no-gutters class="mt-n3">
+      <b-row no-gutters>
         <b-col sm="3" md="2" lg="2" >
           <side-menu :showMenu="showMenu" />
         </b-col>
