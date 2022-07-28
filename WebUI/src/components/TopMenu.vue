@@ -2,7 +2,6 @@
   <nav
     class="
       navbar navbar-dark
-      fixed-top
       bg-dark
       flex-md-nowrap
       p-0
@@ -11,15 +10,21 @@
       menu-custom
     "
   >
-    <a class="navbar-brand col-sm-3 col-md-2 col-lg-2  mr-0" href="#"> OpenAS2 </a>
+    <a class="navbar-brand col-sm-3 col-md-2 col-lg-2 mr-0" href="#">
+      OpenAS2
+    </a>
     <div class="p-2" @click="openSidemenu">
       <b-icon icon="menu-button-wide" variant="white"></b-icon>
     </div>
     <ul class="navbar-nav px-3 ml-auto">
       <b-nav-item-dropdown block right>
         <template #button-content>
-          <b-avatar variant="primary" :text="abbreviationName" size="sm"></b-avatar>
-        <small class="ml-2 text-white">{{userName}}</small>
+          <b-avatar
+            variant="primary"
+            :text="abbreviationName"
+            size="sm"
+          ></b-avatar>
+          <small class="ml-2 text-white">{{ userName }}</small>
         </template>
         <b-dropdown-item v-on:click="logout" href="#">Sign Out</b-dropdown-item>
       </b-nav-item-dropdown>
@@ -55,12 +60,12 @@ export default {
     actualRoute() {
       return this.$router.name;
     },
-    userName(){
+    userName() {
       return store.state.username;
     },
-    abbreviationName(){
+    abbreviationName() {
       return store.state.username.substr(0, 2).toUpperCase();
-    }
+    },
   },
 };
 </script>
