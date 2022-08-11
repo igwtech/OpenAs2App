@@ -17,7 +17,6 @@ import jakarta.ws.rs.Consumes;
 
 import jakarta.ws.rs.DefaultValue;
 
-
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -26,7 +25,6 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.HEAD;
-
 
 import jakarta.ws.rs.PathParam;
 
@@ -151,16 +149,22 @@ public class ApiResource {
     @GET
     @Path("/{resource}/{action}{id:(/[^/]+?)?}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCommand(@PathParam("resource") String resource, @PathParam("action") @DefaultValue("list") String action, @PathParam("id") String itemId) throws Exception {
+    public Response getCommand(@PathParam("resource") String resource,
+            @PathParam("action") @DefaultValue("list") String action, @PathParam("id") String itemId) throws Exception {
         try {
             CommandResult output=null;
-            // TODO: Figure out a better way to return proper JSON objects instead of this hack
+            // TODO: Figure out a better way to return proper JSON objects instead of this
             if (action.equalsIgnoreCase("view") && resource.equalsIgnoreCase("cert") && (itemId != null && itemId.length() > 1)) {
                 output=this.getCertificate(itemId.substring(1));
             } else {
                 output = processRequest(resource, action, itemId, null);
             }
             String jsonResult = this.mapper.writerWithDefaultPrettyPrinter().writeValueAsString(output);
+            if (action.equalsIgnoreCase("delete")) {
+                List<String> params2 = new ArrayList<>();
+                params2.add("store");
+                getProcessor().feedCommand("partnership", params2);
+            }
             return Response.status(200).entity(jsonResult).type(MediaType.APPLICATION_JSON).build();
         } catch (Exception ex) {
             LoggerFactory.getLogger(ApiResource.class.getName()).error(ex.getMessage(), ex);
@@ -178,7 +182,7 @@ public class ApiResource {
     public Response postCommand(@PathParam("resource") String resource, @PathParam("action") @DefaultValue("list") String action, @PathParam("id") String itemId, MultivaluedMap<String, String> formParams) throws Exception {
         try {
             CommandResult output=null;
-            // TODO: Figure out a better way to return proper JSON objects instead of this hack
+            // TODO: Figure out a better way to return proper JSON objects instead of this
             if (action.equalsIgnoreCase("view") && resource.equalsIgnoreCase("cert")) {
                 output= this.getCertificate(itemId);
             } else if (action.equalsIgnoreCase("importbystream") && resource.equalsIgnoreCase("cert")) {
@@ -187,6 +191,12 @@ public class ApiResource {
                 output = processRequest(resource, action, itemId, formParams);
             }
             String jsonResult = this.mapper.writerWithDefaultPrettyPrinter().writeValueAsString(output);
+            //save in file partnership
+            if (action.equalsIgnoreCase("add")) {
+                List<String> params2 = new ArrayList<>();
+                params2.add("store");
+                getProcessor().feedCommand("partnership",params2);
+            }
             return Response.status(200).entity(jsonResult).type(MediaType.APPLICATION_JSON).build();
         } catch (Exception ex) {
             LoggerFactory.getLogger(ApiResource.class.getName()).error(ex.getMessage(), ex);
