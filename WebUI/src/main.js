@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './routes'
 import store from './store'
-// import vuetify from '@/plugins/vuetify' // path 
+import vuetify from '@/plugins/vuetify' // path 
 import VueHighcharts from 'vue-highcharts';
 import Vuelidate from 'vuelidate'
 import VeeValidate from "vee-validate";
@@ -29,6 +29,6 @@ new Vue({
   el:'#app',
   router,
   store,
-  // vuetify,
+  vuetify,
   render: h => h(App)
 });

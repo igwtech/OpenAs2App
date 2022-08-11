@@ -290,6 +290,22 @@ public class XMLPartnershipFactory extends BasePartnershipFactory implements Has
         }
     }
 
+    public void deleteOnFilePartnership(String resource,String name) throws OpenAS2Exception {
+        try {
+            Document doc = getPartnershipsXml();
+            NodeList nodes2 = doc.getElementsByTagName(resource);
+            for (int i = 0; i < nodes2.getLength(); i++) {
+                Element element = (Element)nodes2.item(i);
+                String pName = element.getAttribute("name");
+                if (pName.equals(name)) {
+                    element.getParentNode().removeChild(element);
+                }
+              }
+        } catch (Exception e) {
+            throw new WrappedException(e);
+        }
+    }
+
     @Override
     public void schedule(ScheduledExecutorService executor) throws OpenAS2Exception {
         new FileMonitorAdapter() {

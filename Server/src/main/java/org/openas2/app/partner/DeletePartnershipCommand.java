@@ -4,6 +4,7 @@ import org.openas2.OpenAS2Exception;
 import org.openas2.cmd.CommandResult;
 import org.openas2.partner.Partnership;
 import org.openas2.partner.PartnershipFactory;
+import org.openas2.partner.XMLPartnershipFactory;
 
 import java.util.Iterator;
 
@@ -39,6 +40,12 @@ public class DeletePartnershipCommand extends AliasedPartnershipsCommand {
                 Partnership part = parts.next();
                 if (part.getName().equals(name)) {
                     partFx.getPartnerships().remove(part);
+                    PartnershipFactory partnerFx = getSession().getPartnershipFactory();
+                    synchronized (getSession().getPartnershipFactory()) {
+                        if (partnerFx instanceof XMLPartnershipFactory) {
+                            ((XMLPartnershipFactory) partnerFx).deleteOnFilePartnership("partnership",name);
+                        }
+                    }  
                     return new CommandResult(CommandResult.TYPE_OK, "deleted " + name);
                 }
             }
