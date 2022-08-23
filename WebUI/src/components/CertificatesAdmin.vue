@@ -118,11 +118,11 @@ export default {
             type: "text",
             name: "serial",
             label: "Serial Number (HEX)",
-            placeholder: "Trading Partner's Email Address",
+            placeholder: "Serial Number (HEX)",
             show: true,
             disabled: true,
             _validate: {
-              email: true,
+              required: true,
             },
           },
           {
@@ -132,7 +132,9 @@ export default {
             placeholder: "Valid Not Before",
             show: true,
             disabled: true,
-            _validate: {},
+            _validate: {
+              required: true,
+            },
           },
           {
             type: "datepicker",
@@ -140,9 +142,10 @@ export default {
             label: "Expiration Date",
             placeholder: "Expiration Date",
             show: true,
-
             disabled: true,
-            _validate: {},
+            _validate: {
+              required: true,
+            },
           },
           {
             type: "text",
@@ -151,7 +154,9 @@ export default {
             placeholder: "Subject",
             disabled: true,
             show: true,
-            _validate: {},
+            _validate: {
+              required: true,
+            },
           },
           {
             type: "text",
@@ -160,7 +165,9 @@ export default {
             placeholder: "Fingerprint (SHA1)",
             show: true,
             disabled: true,
-            _validate: {},
+            _validate: {
+              required: true,
+            },
           },
           {
             type: "file",
@@ -315,11 +322,9 @@ export default {
       this.$root.$emit("bv::show::modal", this.infoModal.id);
     },
     editObject: async function (_item) {
-      console.log("item_edit", _item);
       this.infoModal.title = "Edit certificate";
       var newObj = this.getNewObject();
       const result = await Utils.Crud.getObject("cert", _item.key, newObj);
-      console.log("resutl al editar", result);
       this.item = Object.assign(this.item, result);
       this.changedCert();
       this.schema.fields[this.schema.fields.length - 1]._validate = false;
@@ -353,10 +358,7 @@ export default {
           alias: data.alias,
           data: data.data,
         };
-        console.log("Saving", data);
         var old_id = data._id;
-        // delete data._id;
-        console.log("old_id", old_id);
         if (old_id !== null) {
           await Utils.Crud.deleteObject("cert", old_id).then(
             async () =>
@@ -376,7 +378,6 @@ export default {
       }
     },
     fileUpload: function ({ file, e }) {
-      console.log("item.....", this.item);
       var oFile = file;
       console.log(file);
        // filter for certificate files
@@ -386,14 +387,17 @@ export default {
         alert("Error invalid file-type");
         return;
       }
+      // if (!rFilter.test(oFile.type)) {
+      //   alert("Error invalid file-type");
+      //   return;
+      // }
       if (oFile.size == 0) {
-        alert("Error unable to read file, empty?");
+        Swal.fire("Error!", "Error unable to read file, empty?", "error");
         return;
       }
       var oReader = new FileReader();
       var that = this;
       oReader.onload = function (e) {
-        console.log("edit---->", e.target.result);
         var PEM = e.target.result;
         try {
            PEM = PEM.replace("-----BEGIN CERTIFICATE-----", "").replace(
@@ -411,34 +415,35 @@ export default {
       oReader.readAsText(oFile);
     },
     changedCert: function () {
-      var cert = new X509();
-      console.log("this.item.data", this.item.data);
-      var PEM = this.item.data;
-      console.log("item.....", this.item);
-      if (this.item.data == null) {
-        this.item.serial = "";
-        this.item.issuerName = "";
-        this.item.validNotBefore = null;
-        this.item.validNotAfter = null;
-        this.item.subject = "";
-        this.item.fingerPrint = "";
-        return;
+      try {
+        var cert = new X509();
+        var PEM = this.item.data;
+        if (this.item.data == null) {
+          this.item.serial = "";
+          this.item.issuerName = "";
+          this.item.validNotBefore = null;
+          this.item.validNotAfter = null;
+          this.item.subject = "";
+          this.item.fingerPrint = "";
+          return;
+        }
+        if (PEM.substr(0, 4) !== "----") {
+          PEM =
+            "-----BEGIN CERTIFICATE-----\n" +
+            PEM +
+            "\n-----END CERTIFICATE-----";
+        }
+        cert.readCertPEM(PEM);
+        this.item.serial = cert.getSerialNumberHex();
+        this.item.issuerName = cert.getIssuerString();
+        this.item.validNotBefore = zulutodate(cert.getNotBefore());
+        this.item.validNotAfter = zulutodate(cert.getNotAfter());
+        this.item.subject = cert.getSubjectString();
+        this.item.fingerPrint = KJUR.crypto.Util.hashHex(cert.hex, "sha1");
+      } catch (error) {
+        console.log("error", error);
+        Swal.fire("Error!", error, "error");
       }
-      if (PEM.substr(0, 4) !== "----") {
-        PEM =
-          "-----BEGIN CERTIFICATE-----\n" + PEM + "\n-----END CERTIFICATE-----";
-      }
-
-      console.log("PEM changedCert", PEM);
-      cert.readCertPEM(PEM);
-      this.item.serial = cert.getSerialNumberHex();
-      this.item.issuerName = cert.getIssuerString();
-      this.item.validNotBefore = zulutodate(cert.getNotBefore());
-      this.item.validNotAfter = zulutodate(cert.getNotAfter());
-      this.item.subject = cert.getSubjectString();
-      this.item.fingerPrint = KJUR.crypto.Util.hashHex(cert.hex, "sha1");
-      console.log("item changedCert", this.item);
-      console.log("cert changedCert", cert);
     },
   },
 };
