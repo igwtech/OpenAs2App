@@ -15,7 +15,7 @@
     <label for="inputPassword" class="sr-only">Password</label>
     <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
     <label for="inputServer" class="sr-only">Server</label>
-    <input v-model="server" type="text" id="inputServer" class="form-control" placeholder="Server" required="" autofocus="">
+    <input v-model="server"  :type="(hidden_server)?'hidden':'text'" id="inputServer" class="form-control" placeholder="Server" required="" autofocus="">
     <div class="checkbox mb-3">
         <label>
         <input type="checkbox" v-bind:checked="rememberme" value="remember-me"> Remember me
@@ -23,7 +23,7 @@
     </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="login">Sign in</button>
     <div  v-if="errored" v-html="errormsg" class="alert alert-primary" role="alert"></div>
-    <p class="mt-5 mb-3 text-muted">© 2017-2019</p>
+    <p class="mt-5 mb-3 text-muted">© 2017-2022</p>
     </form>
 </div>
 </template>
@@ -37,7 +37,8 @@ export default {
     data: function() {return {
         username: '',
         password: '',
-        server: 'https://127.0.0.1:8443/api',
+        server: process.env.VUE_APP_ROOT_API, 
+        hidden_server: (process.env.VUE_APP_HIDDEN_SERVER == 'true'),
         rememberme: false,
         loading: false,
         errormsg: '',
