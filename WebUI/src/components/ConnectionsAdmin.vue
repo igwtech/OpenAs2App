@@ -131,7 +131,7 @@ export default {
             placeholder: "i.e.  AS2 Transfer",
             value: "",
             _validate: {
-              required: false,
+              required: true,
               regex: `[^&<>"']`,
             },
           },
@@ -142,7 +142,7 @@ export default {
             placeholder: "i.e.  datamanager@mypartner.com",
             value: "",
             _validate: {
-              required: false,
+              required: true,
               email: true,
             },
           },
@@ -181,7 +181,7 @@ export default {
             placeholder: "i.e.  http://www.MyAS2Machine.com:10081",
             value: "",
             _validate: {
-              required: false,
+              required: true,
               url: true,
               regex: `[^&<>"']`,
             },
@@ -235,15 +235,6 @@ export default {
               required: true,
             },
           },
-          {
-            type: "checkbox",
-            name: "pollerConfig.enabled",
-            label: "Enable Poller Config",
-            value: "true",
-            _validate: {
-              required: false
-            }
-          }
         ],
       },
       fields: [
