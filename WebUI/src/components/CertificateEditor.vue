@@ -67,32 +67,32 @@ export default {
         }
     },
     watch: {
-        data: function(e) {
-            console.log('DATA CHANGED!',e);
+        data: function() {
+            // console.log('DATA CHANGED!',e);
             this.changedCert();
         }
     },
     mounted: function() {
-        console.log(this.model);
+        // console.log(this.model);
         this.model.then((e)=>this.data=e);
     },
     methods: {
         submitForm: function(e) {
-            console.log('submitForm',e);
+            // console.log('submitForm',e);
             e.preventDefault();
             this.$emit('commit',this.data);
         },
         deleteForm: function(e) {
-            console.log('submitForm',e);
+            // console.log('submitForm',e);
             e.preventDefault();
             this.$emit('delete',this.data._id);
         },
-        cancelForm: function(e) {
+        cancelForm: function() {
             this.$emit('revert',this.data._id);
         },
-        fileUpload: function(e) {
+        fileUpload: function() {
           var oFile = document.getElementById('upload').files[0];
-          console.log(oFile,e);
+          // console.log(oFile,e);
           // filter for image files
           var rFilter = /^(application\/x-x509-ca-cert|application\/x-pkcs12)$/i;
           if (! rFilter.test(oFile.type)) {
@@ -106,7 +106,7 @@ export default {
           var oReader = new FileReader();
           var that=this;
           oReader.onload = function(e){
-            console.log(e.target.result);
+            // console.log(e.target.result);
             var PEM = e.target.result;
             PEM=PEM.replace('-----BEGIN CERTIFICATE-----','').replace('-----END CERTIFICATE-----','');
             PEM=PEM.replace(/[^A-Za-z0-9+/=]+/gm,'');
@@ -117,6 +117,7 @@ export default {
 
         },
         changedCert: function() {
+            // eslint-disable-next-line
             var cert = new X509();
             var PEM = this.data.data;
             if(this.data.data == null) {
@@ -134,11 +135,14 @@ export default {
             cert.readCertPEM(PEM);
             this.serial = cert.getSerialNumberHex();
             this.issuerName=cert.getIssuerString();
+            // eslint-disable-next-line
             this.validNotBefore = zulutodate(cert.getNotBefore());
+            // eslint-disable-next-line
             this.validNotAfter = zulutodate(cert.getNotAfter());
             this.subject = cert.getSubjectString();
+            // eslint-disable-next-line
             this.fingerPrint = KJUR.crypto.Util.hashHex(cert.hex, 'sha1');
-            console.log(cert);
+            // console.log(cert);
         }
     }
 }

@@ -3,10 +3,7 @@
     <h1 v-if="loading" class="h3 mb-3 font-weight-normal">Signing in...</h1>
     <form v-else class="form-signin">
 
-   <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120">
-       <text x="55" y="50" font-size="20" style="color:red">Open</text>
-       <text x="5" y="95" font-size="55" font-weight="bolder">AS2</text>
-   </svg> 
+   <img src="https://raw.githubusercontent.com/igwtech/OpenAs2App/master/docs/as2_logo.png" width="120" height="120" />
    
     
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
