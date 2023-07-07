@@ -43,13 +43,9 @@
     "eslint": "^8.20.0",
     "sass": "^1.32.0",
     "sass-loader": "^10.0.0",
-<<<<<<< HEAD
     "vue-cli-plugin-vuetify": "~2.4.0",
     "vue-template-compiler": "^2.6.10",
     "vuetify-loader": "^1.7.0"
-=======
-    "vue-template-compiler": "^2.6.10"
->>>>>>> upstream/master
   },
   "eslintConfig": {
     "root": false,

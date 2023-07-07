@@ -35,12 +35,8 @@ export default {
     data: function() {return {
         username: '',
         password: '',
-<<<<<<< HEAD
         server: process.env.VUE_APP_ROOT_API||'https://127.0.0.1:8443/api',
         server_input_type: (process.env.VUE_APP_HIDDEN_SERVER=='true')?'hidden':'text',
-=======
-        server: 'http://127.0.0.1:8443/api',
->>>>>>> upstream/master
         rememberme: false,
         loading: false,
         errormsg: '',
