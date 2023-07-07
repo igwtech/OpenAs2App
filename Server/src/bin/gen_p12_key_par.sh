@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 x=`basename $0`
+
 if test $# -ne 4; then
   echo "Generate a certificate to a PKCS12 key store."
   echo "You must supply a target key store without the extension (extension will be added as .p12) and an alias for generated certificate."
@@ -44,25 +45,15 @@ if [ -n "$CERT_START_DATE" ]; then
 fi
 
 if [ -z $JAVA_HOME ]; then
-  OS=$(uname -s)
-
-  if [[ "${OS}" == *Darwin* ]]; then
-    # Mac OS X platform
-    JAVA_HOME=$(/usr/libexec/java_home)
-  elif [[ "${OS}" == *Linux* ]]; then
-    # Linux platform
-    JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-  elif [[ "${OS}" == *MINGW* ]]; then
-    # Windows NT platform
-    echo "Windows not supported by this script"
-  fi
+  baseDir=`dirname $0`
+  . ${baseDir}/find_java
 fi
-
 if [ -z $JAVA_HOME ]; then
   echo "ERROR: Cannot find JAVA_HOME"
-  exit
+  exit 1
 fi
 
+echo "Using JAVA_HOME: ${JAVA_HOME}"
 if [ "1" != "$IS_AUTOMATED_EXEC" ]; then
   echo "Generate a certificate to a PKCS12 key store."
   echo "Generating certificate:  using alias $certAlias to ${tgtStore}.p12 $PRE_GEN_MSG_ADDITIONAL"

@@ -27,32 +27,25 @@ certAlias=$3
 action=$4
 
 if [ -z $JAVA_HOME ]; then
-  OS=$(uname -s)
-
-  if [[ "${OS}" == *Darwin* ]]; then
-    # Mac OS X platform
-    JAVA_HOME=$(/usr/libexec/java_home)
-  elif [[ "${OS}" == *Linux* ]]; then
-    # Linux platform
-    JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-  elif [[ "${OS}" == *MINGW* ]]; then
-    # Windows NT platform
-    echo "Windows not supported by this script"
-  fi
+  baseDir=`dirname $0`
+  . ${baseDir}/find_java
 fi
 
 if [ -z $JAVA_HOME ]; then
   echo "ERROR: Cannot find JAVA_HOME"
-  exit
-fi
-
-echo "Executing action \"${action}\" on certificate from file \"${srcFile}\" using alias \"${certAlias}\" to: ${tgtStore}"
-read -p "Do you wish to execute this request? [Y/N]" Response
-if [  $Response != "Y" -a $Response != "y"  ] ; then
   exit 1
 fi
 
-read -p "Enter password for keystore:" ksPwd
+if [ "1" != "$IS_AUTOMATED_EXEC" ]; then
+  echo "Executing action \"${action}\" on certificate from file \"${srcFile}\" using alias \"${certAlias}\" to: ${tgtStore}"
+  read -p "Do you wish to execute this request? [Y/N]" Response
+  if [  $Response != "Y" -a $Response != "y"  ] ; then
+    exit 1
+  fi
+  read -p "Enter password for keystore:" ksPwd
+else
+  ksPwd=$KEYSTORE_PASSWORD
+fi
 
 if [ "${action}" = "replace" ]; then
     $JAVA_HOME/bin/keytool -delete -alias ${certAlias} -keystore ${tgtStore} -storepass $ksPwd -storetype pkcs12

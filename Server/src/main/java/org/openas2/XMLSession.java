@@ -57,7 +57,7 @@ public class XMLSession extends BaseSession {
     private CommandRegistry commandRegistry;
     private CommandManager cmdManager = new CommandManager();
 
-    // Poller base confog that will be used for partnership based pollers. Can be overridden in the partnership
+    // Poller base config that will be used for partnership based pollers. Can be overridden in the partnership
     private Node basePollerConfigNode = null;
 
     private Attributes manifestAttributes = null;
@@ -146,9 +146,6 @@ public class XMLSession extends BaseSession {
         LOGGER.info("Loading properties...");
 
         Map<String, String> properties = XMLUtil.mapAttributes(propNode, false);
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        Map<String, String> sysProps = (Map)System.getProperties();
-        properties.putAll(sysProps);
         // Make key things accessible via static object for things that do not have
         // accesss to session object
         properties.put(Properties.APP_TITLE_PROP, getAppTitle());
@@ -200,6 +197,17 @@ public class XMLSession extends BaseSession {
                 String key = entry.getKey();
                 // Put the changed value into the Properties set
                 Properties.setProperty(key, parsedVal);
+            }
+        }
+        /* Put system properties in afterwards to avoid parsing embedded properties that may have 
+           a $ sign in the value but only if the key does not exist.
+        */
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        Map<String, String> sysProps = (Map)System.getProperties();
+        for (Map.Entry<String, String> entry : sysProps.entrySet()) {
+            String key = entry.getKey();
+            if (Properties.getProperty(key, null) == null) {
+                Properties.setProperty(key, entry.getValue());
             }
         }
     }
@@ -327,7 +335,7 @@ public class XMLSession extends BaseSession {
             String partnershipName = null;
             Node defaultsNode = moduleNode.getAttributes().getNamedItem("defaults");
             if (defaultsNode == null) {
-                // If there is a format nodethen this is a generic poller module
+                // If there is a format node then this is a generic poller module
                 Node formatNode = moduleNode.getAttributes().getNamedItem("format");
                 if (formatNode == null) {
                     throw new OpenAS2Exception("Invalid poller module coniguration: " + moduleNode.toString());
@@ -337,7 +345,7 @@ public class XMLSession extends BaseSession {
                 // Since the partnerships will not have loaded yet, just use the defaults string as the partnership name
                 partnershipName = defaultsNode.getNodeValue();
             }
-            loadPartnershipPoller(moduleNode, partnershipName, "configPoller");
+            loadPartnershipPoller(moduleNode, partnershipName, Session.CONFIG_POLLER);
             return;
         }
         ProcessorModule procmod = (ProcessorModule) XMLUtil.getComponent(moduleNode, this);
