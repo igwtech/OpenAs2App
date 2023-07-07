@@ -119,7 +119,7 @@ export default {
             placeholder: "i.e.  http://www.MyPartnerAS2Machine.com:10080",
             value: "",
             _validate: {
-              required: true,
+              required: false,
               url: true,
               regex: `[^&<>"']`,
             },
@@ -142,7 +142,7 @@ export default {
             placeholder: "i.e.  datamanager@mypartner.com",
             value: "",
             _validate: {
-              required: true,
+              required: false,
               email: true,
             },
           },
@@ -181,7 +181,7 @@ export default {
             placeholder: "i.e.  http://www.MyAS2Machine.com:10081",
             value: "",
             _validate: {
-              required: true,
+              required: false,
               url: true,
               regex: `[^&<>"']`,
             },

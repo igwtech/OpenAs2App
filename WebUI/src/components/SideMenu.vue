@@ -58,11 +58,10 @@ export default {
       let icon="house"
       switch (routeName) {
         case "Dashboard":
-          icon="graph-up"
-          break;
+            icon="graph-up"
+            break;
           case "Partners":
             icon="person"
-            
             break;
           case "Connections":
             icon="people"
