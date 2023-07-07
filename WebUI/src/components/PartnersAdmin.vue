@@ -100,6 +100,14 @@ export default {
             },
           },
           {
+            type: "checkbox",
+            name: "is_local",
+            label: "Local Station",
+            _validate: {
+              required: true
+            }
+          },
+          {
             type: "select",
             name: "x509_alias",
             label: "Certificate Alias",
@@ -136,6 +144,7 @@ export default {
         name: "",
         as2_id: "",
         email: "",
+        is_local: false,
         x509_alias: "",
       },
       loadingTable: false,
@@ -166,6 +175,7 @@ export default {
         name: "",
         as2_id: "",
         email: "",
+        is_local: false,
         x509_alias: "",
       };
       this.$root.$emit("bv::hide::modal", this.infoModal.id);
@@ -214,6 +224,7 @@ export default {
         name: "",
         as2_id: "",
         email: "",
+        is_local: false,
         x509_alias: "",
       };
       this.$root.$emit("bv::show::modal", this.infoModal.id);

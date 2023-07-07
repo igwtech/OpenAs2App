@@ -21,7 +21,7 @@
                 </td>
                 </tr>
             </tbody>
-            <p v-else > No partners found</p> 
+            <p v-else > No items found</p> 
             </table>
         </div>
      </section>
