@@ -14,7 +14,7 @@
     />
 
     <div class="">
-      <b-row no-gutters class="mt-n3">
+      <b-row no-gutters>
         <b-col sm="3" md="2" lg="2" >
           <side-menu :showMenu="showMenu" />
         </b-col>
@@ -25,33 +25,10 @@
           :md="showMenu ? 10 : 12"
           :lg="showMenu ? 10 : 12"
         >
-          <!-- :xl="showMenu ? 11 : 12" -->
           <b-container fluid class="mt-3">
-        
-          <!-- <main role="main" class="main-principal"> -->
             <router-view></router-view>
-          <!-- </main> -->
           </b-container>
-          <!-- <main
-            role="main"
-            class="ml-sm-auto px-4 main-principal"
-          > -->
-          <!-- :class="
-              showMenu == true
-                ? 'col-sm-9 col-md-9 col-lg-10'
-                : 'col-sm-12 col-md-12 col-lg-12'
-            " -->
-          <!-- </main> -->
         </b-col>
-        <!--  <p> -->
-        <!-- use router-link component for navigation. -->
-        <!-- specify the link by passing the `to` prop. -->
-        <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
-        <!--   <router-link to="/foo">Go to Foo</router-link>   -->
-        <!--   <router-link to="/bar">Go to Bar</router-link>   -->
-        <!-- </p> -->
-        <!-- route outlet -->
-        <!-- component matched by the route will render here -->
       </b-row>
     </div>
   </div>

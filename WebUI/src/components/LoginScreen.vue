@@ -3,7 +3,7 @@
     <h1 v-if="loading" class="h3 mb-3 font-weight-normal">Signing in...</h1>
     <form v-else class="form-signin">
 
-   <img src="https://raw.githubusercontent.com/igwtech/OpenAs2App/master/docs/as2_logo.png" width="120" height="120" />
+   <img src="https://raw.githubusercontent.com/igwtech/OpenAs2App/master/docs/as2_logo.png"/> 
    
     
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
@@ -12,7 +12,7 @@
     <label for="inputPassword" class="sr-only">Password</label>
     <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
     <label for="inputServer" class="sr-only">Server</label>
-    <input v-model="server" type="text" id="inputServer" class="form-control" placeholder="Server" required="" autofocus="">
+    <input v-model="server" :type="server_input_type" id="inputServer" class="form-control" placeholder="Server" required="" autofocus="">
     <div class="checkbox mb-3">
         <label>
         <input type="checkbox" v-bind:checked="rememberme" value="remember-me"> Remember me
@@ -20,7 +20,7 @@
     </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="login">Sign in</button>
     <div  v-if="errored" v-html="errormsg" class="alert alert-primary" role="alert"></div>
-    <p class="mt-5 mb-3 text-muted">© 2017-2019</p>
+    <p class="mt-5 mb-3 text-muted"> version#{{ version }} © 2017-2023</p>
     </form>
 </div>
 </template>
@@ -28,17 +28,20 @@
 import { mapState } from 'vuex';
 import store from '../store';
 import axios from 'axios';
+process.env.VUE_APP_VERSION = require('../../package.json').version;
 
 export default {
     name: 'login-screen',
     data: function() {return {
         username: '',
         password: '',
-        server: 'http://127.0.0.1:8443/api',
+        server: process.env.VUE_APP_ROOT_API||'https://127.0.0.1:8443/api',
+        server_input_type: (process.env.VUE_APP_HIDDEN_SERVER=='true')?'hidden':'text',
         rememberme: false,
         loading: false,
         errormsg: '',
-        errored: false
+        errored: false,
+        version: process.env.VUE_APP_VERSION || '1.2.1'
     }},
     methods: {
         login: function(e) {

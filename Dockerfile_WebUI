@@ -1,9 +1,14 @@
-FROM node:19-alpine AS web-builder
+FROM node:lts-alpine AS web-builder
+ARG VUE_APP_ROOT_API=https://openas2.example.com/api
+ARG VUE_APP_HIDDEN_SERVER=false
 RUN npm install -g --force yarn
 COPY ./WebUI /usr/src/webui
 WORKDIR /usr/src/webui
 RUN yarn install
-RUN export NODE_OPTIONS=--openssl-legacy-provider && yarn run build
+RUN npx browserslist@latest --update-db
+ENV NODE_OPTIONS=--openssl-legacy-provider
+RUN yarn run build
 
 FROM nginx
 COPY --from=web-builder /usr/src/webui/dist /usr/share/nginx/html
+EXPOSE 80

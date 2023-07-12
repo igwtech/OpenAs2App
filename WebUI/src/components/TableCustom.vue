@@ -11,6 +11,7 @@
             label-align-sm="right"
             label-size="sm"
             class="mb-0"
+            label-class="pt-4"
           >
             <b-input-group size="sm">
               <b-form-input
@@ -35,6 +36,8 @@
             label-cols-sm="6"
             label-cols-md="5"
             label-cols-lg="4"
+            label-class="pt-4"
+            
             label-align-sm="right"
             label-size="sm"
             class="mb-0"

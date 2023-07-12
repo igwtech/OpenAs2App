@@ -16,7 +16,6 @@
       <h1 class="h2">Messages</h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-          <!-- @click="newObject()" -->
           <b-button
             v-if="isPathMessageList"
             @click="getList()"
@@ -34,7 +33,6 @@
             <b-icon icon="file-earmark-excel-fill"></b-icon>
             Export</b-button
           >
-          <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Export</button> -->
         </div>
       </div>
     </div>
@@ -287,24 +285,7 @@ export default {
         });
         _list = _list2;
       }
-      // if (this.filter.dateTime != "") {
-      //   _list.forEach((item) => {
-      //     item.create_dt =
-      //       this.filter.dateTime == "America/Caracas"
-      //         ? 
-      //         // moment( item.create_dt)
-      //         //     .utc(item.create_dt)
-      //         //     .toDate()
-      //             moment(item.create_dt).zone("-08:00")
-      //             .format("YYYY-DD-MM H:mm:ss")
-      //         :
-      //         moment(item.create_dt).zone("-04:00")
-      //             .format("YYYY-DD-MM H:mm:ss")
-      //         // moment()
-      //         //     .utc(this.filter.dateTime, item.create_dt)
-      //         //     .format("YYYY-DD-MM H:mm:ss");
-      //   });
-      // }
+   
       return _list;
     },
     fields() {
@@ -442,18 +423,7 @@ export default {
       );
       console.log("head", head);
       let body = _.map(this.getFilterItems, (item) => {
-        // return [
-        //   item.key,
-        //   item.state,
-        //   item.create_dt,
-        //   item.sender_id,
-        //   item.receiver_id,
-        //   item.msg_id,
-        //   item.file_name,
-        //   item.encryption_algorithm,
-        //   item.signature_algorithm,
-        //   item.mdn_mode,
-        // ];
+      
         return {
         "key": item.key,
         "state": item.state,
@@ -466,27 +436,10 @@ export default {
         "signature_algorithm": item.signature_algorithm,
         "mdn_mode": item.mdn_mode,
         }
-        // console.log("value,key",value);
-        // return JSON.parse(JSON.stringify(item))
+
       });
-      // _.map(this.getFilterItems, (_item, index) => {
-      //   let array = [];
-      //   array.push(index);
-      //   _.forIn(_item, function (value, key) {
-      //     if (typeof _item[key] === "string") {
-      //       array.push(value);
-      //     }
-      //   });
-      //   return array;
-      // });
+     
       console.log("body", body);
-
-      // var doc = new jsPDF();
-      // doc.autoTable(head, body, {
-      //     columnStyles: {
-
-      //     },
-      // });
 
       autoTable(doc, {
         columnStyles: { 5: { halign: "center", cellWidth: 50 },6: { halign: "center", cellWidth: 40 } },
@@ -494,8 +447,7 @@ export default {
         body: body,
       });
       doc.save("table-" + moment().format("YYYYMMDDH:mm:ss") + ".pdf");
-      // doc.autoPrint(this.fields, this.items2);
-      // doc.save("two-by-four.pdf");
+    
     },
     filterItems: function (data) {
     },

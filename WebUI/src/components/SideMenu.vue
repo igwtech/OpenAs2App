@@ -1,6 +1,8 @@
+ // eslint-disable-next-line 
+/* eslint-disable */
 <template>
   <b-list-group v-if="showMenu" flush>
-      <b-list-group-item  :key="route.path" v-for="route in routes"
+      <b-list-group-item size="sm" :key="route.path" v-for="route in routes"
           :to="route.path"
           :active="actualRoute == route.name"
         >
@@ -56,11 +58,10 @@ export default {
       let icon="house"
       switch (routeName) {
         case "Dashboard":
-          icon="graph-up"
-          break;
+            icon="graph-up"
+            break;
           case "Partners":
             icon="person"
-            
             break;
           case "Connections":
             icon="people"
