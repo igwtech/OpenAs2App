@@ -34,6 +34,7 @@ import org.openas2.cmd.processor.restapi.AuthenticationRequestFilter;
 import org.openas2.util.Properties;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
