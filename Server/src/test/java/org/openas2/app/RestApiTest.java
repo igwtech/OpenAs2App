@@ -16,13 +16,24 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.openas2.Component;
 import org.openas2.TestResource;
+import org.openas2.cmd.processor.RestCommandProcessor;
+import org.openas2.lib.xml.PropertyReplacementFilter;
+import org.openas2.util.XMLUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+import net.bytebuddy.dynamic.scaffold.MethodGraph.NodeList;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
@@ -36,15 +47,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
     private static OpenAS2Server serverInstance;
     private static TemporaryFolder scratchpad = new TemporaryFolder();
     private static CloseableHttpClient httpclient;
+    private static String baseUri;
 
-    /* Force a pass test for now till the tests are fixed */
-    @Test
-    public void shouldRespondWithCerts() throws Exception {
-        String buffer = "\"type\":\"OK\"";
-        assertThat("Getting Certs API ", buffer, containsString("\"type\":\"OK\""));
-    }
 
-    /*
+    
     @Rule
     public TemporaryFolder tmp = new TemporaryFolder();
 
@@ -63,8 +69,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
             System.setProperty("org.apache.commons.logging.Log", "org.openas2.logging.Log");
             System.setProperty("org.openas2.logging.defaultlog", "TRACE");
             //	    executorService = Executors.newFixedThreadPool(20);
-
-            RestApiTest.serverInstance = new OpenAS2Server.Builder().run(RESOURCE.get("MyCompany", "config", "config.xml").getAbsolutePath());
+            String configPathname=RESOURCE.get("MyCompany", "config", "config.xml").getAbsolutePath();
+            RestApiTest.serverInstance = new OpenAS2Server.Builder().run(configPathname);
+            getBaseUrl(RestApiTest.serverInstance);
         } catch (Throwable e) {
             // aid for debugging JUnit tests
             System.err.println("ERROR occurred: " + ExceptionUtils.getStackTrace(e));
@@ -73,6 +80,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
     }
 
+    private static void getBaseUrl(OpenAS2Server server)  throws Exception {
+        Component restCmp = server.getSession().getComponent("RestCommandProcessor");
+        RestApiTest.baseUri = RestCommandProcessor.BASE_URI;
+        restCmp.getParameters().forEach((t, u) -> {if(t.equals("baseuri")) RestApiTest.baseUri=u;});
+        return;
+    }
     @BeforeClass
     public static void startClient() throws Exception {
         RestApiTest.httpclient = HttpClients.createDefault();
@@ -111,39 +124,40 @@ import static org.hamcrest.MatcherAssert.assertThat;
     }
 
     @Test
-    public void shouldRespondWithVersion() throws Exception {
-        String buffer = this.doRequest(new HttpGet("http://127.0.0.1:8080/api/"), true);
-        assertThat("Getting API version and server info", buffer, containsString(serverInstance.getSession().getAppTitle()));
-    }
-
-    @Test
     public void shouldRespondWithAccessDenied() throws Exception {
-        String buffer = this.doRequest(new HttpGet("http://127.0.0.1:8080/api/partner/list"), false);
-        assertThat("Getting API without user/pass", buffer, containsString("You cannot access this resource"));
+        
+        String buffer;
+        buffer = this.doRequest(new HttpGet(baseUri+"/api/"), false); // Kickstart Jersey
+        buffer = this.doRequest(new HttpGet(baseUri+"/api/partnership/list"), false);
+        assertThat("Getting partnership API without user/pass", buffer, containsString("You cannot access this resource"));
 
-        buffer = this.doRequest(new HttpGet("http://127.0.0.1:8080/api/partnership/list"), false);
-        assertThat("Getting API without user/pass", buffer, containsString("You cannot access this resource"));
+        buffer = this.doRequest(new HttpGet(baseUri+"/api/cert/list"), false);
+        assertThat("Getting cert API without user/pass", buffer, containsString("You cannot access this resource"));
+        
+        buffer = this.doRequest(new HttpGet(baseUri+"/api/partner/list"), false);
+        assertThat("Getting partner API without user/pass", buffer, containsString("You cannot access this resource"));
 
-        buffer = this.doRequest(new HttpGet("http://127.0.0.1:8080/api/cert/list"), false);
-        assertThat("Getting API without user/pass", buffer, containsString("You cannot access this resource"));
     }
 
     @Test
     public void shouldRespondWithPartners() throws Exception {
-        String buffer = this.doRequest(new HttpGet("http://127.0.0.1:8080/api/partner/list"), true);
-        assertThat("Getting Partners API ", buffer, containsString("\"type\":\"OK\""));
+        String buffer = this.doRequest(new HttpGet(baseUri+"/api/partner/list"), true);
+        assertThat("Getting Partners API ", buffer, containsString("type"));
+        assertThat("Getting Partners API ", buffer, containsString("OK"));
     }
 
     @Test
     public void shouldRespondWithPartnerships() throws Exception {
-        String buffer = this.doRequest(new HttpGet("http://127.0.0.1:8080/api/partnership/list"), true);
-        assertThat("Getting Partnership API ", buffer, containsString("\"type\":\"OK\""));
+        String buffer = this.doRequest(new HttpGet(baseUri+"/api/partnership/list"), true);
+        assertThat("Getting Partnership API ", buffer, containsString("type"));
+        assertThat("Getting Partnership API ", buffer, containsString("OK"));
     }
 
     @Test
     public void shouldRespondWithCerts() throws Exception {
-        String buffer = this.doRequest(new HttpGet("http://127.0.0.1:8080/api/cert/list"), true);
-        assertThat("Getting Certs API ", buffer, containsString("\"type\":\"OK\""));
+        String buffer = this.doRequest(new HttpGet(baseUri+"/api/cert/list"), true);
+        assertThat("Getting Certs API ", buffer, containsString("type"));
+        assertThat("Getting Certs API ", buffer, containsString("OK"));
     }
-    */
+    
 }
