@@ -46,7 +46,7 @@ public class DeletePartnerCommand extends AliasedPartnershipsCommand {
             }
 
             if (found == false) {
-                return new CommandResult(CommandResult.TYPE_ERROR, "Unknown partner name");
+                return new CommandResult(CommandResult.TYPE_ERROR, "Unknown partner name: " + name);
             }
 
             Iterator<Partnership> partnerships = partFx.getPartnerships().iterator();
@@ -57,18 +57,12 @@ public class DeletePartnerCommand extends AliasedPartnershipsCommand {
             }
 
             if (partnershipFound) {
-                return new CommandResult(CommandResult.TYPE_ERROR,
-                        "Can not delete partner; it is tied to some partnerships");
+                return new CommandResult(CommandResult.TYPE_ERROR, "Cannot delete partner; it is tied to some partnerships");
             }
-
             partFx.getPartners().remove(name);
-            PartnershipFactory partnerFx = getSession().getPartnershipFactory();
-            synchronized (getSession().getPartnershipFactory()) {
-                if (partnerFx instanceof XMLPartnershipFactory) {
-                    ((XMLPartnershipFactory) partnerFx).deleteOnFilePartnership("partner", name);
-                }
+            if (!((XMLPartnershipFactory) partFx).deleteElement("/partnerships/partner[@name='" + name + "']")) {
+                new CommandResult(CommandResult.TYPE_ERROR, "Partner delete failed in XML document for partner name: " + name);
             }
-
             return new CommandResult(CommandResult.TYPE_OK);
         }
     }

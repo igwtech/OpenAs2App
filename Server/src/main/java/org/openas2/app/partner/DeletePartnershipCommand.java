@@ -40,17 +40,13 @@ public class DeletePartnershipCommand extends AliasedPartnershipsCommand {
                 Partnership part = parts.next();
                 if (part.getName().equals(name)) {
                     partFx.getPartnerships().remove(part);
-                    PartnershipFactory partnerFx = getSession().getPartnershipFactory();
-                    synchronized (getSession().getPartnershipFactory()) {
-                        if (partnerFx instanceof XMLPartnershipFactory) {
-                            ((XMLPartnershipFactory) partnerFx).deleteOnFilePartnership("partnership",name);
-                        }
-                    }  
-                    return new CommandResult(CommandResult.TYPE_OK, "deleted " + name);
+                    if (!((XMLPartnershipFactory) partFx).deleteElement("/partnerships/partnership[@name='" + name + "']")) {
+                        return new CommandResult(CommandResult.TYPE_ERROR, "Partnership delete failed in XML document for partnership name: " + name);
+                    }
+                    return new CommandResult(CommandResult.TYPE_OK);
                 }
             }
-
-            return new CommandResult(CommandResult.TYPE_ERROR, "Unknown partnership name");
+            return new CommandResult(CommandResult.TYPE_ERROR, "Partnership not found: " + name);
         }
     }
 }
