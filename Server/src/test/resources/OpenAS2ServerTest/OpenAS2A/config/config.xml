@@ -2,10 +2,6 @@
 <openas2>
    <properties storageBaseDir="%home%/../data"
                configDir="%home%"
-               console.logger.enabled="true"
-               file.logger.enabled="true"
-               socket.logger.enabled="false"
-               email.logger.enabled="false"
                console.command.processor.enabled="true"
                socket.command.processor.enabled="false"
                module.AS2SenderModule.enabled="true"
