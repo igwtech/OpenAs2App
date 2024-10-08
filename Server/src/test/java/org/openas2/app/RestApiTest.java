@@ -74,11 +74,10 @@ public class RestApiTest {
         fos.close();
 
         try {
-            System.setProperty("org.apache.commons.logging.Log", "org.openas2.logging.Log");
-            // System.setProperty("org.openas2.logging.defaultlog", "TRACE");
-            //	    executorService = Executors.newFixedThreadPool(20);
-            String configPathname=RESOURCE.get("MyCompany", "config", "config.xml").getAbsolutePath();
-            RestApiTest.serverInstance = new OpenAS2Server.Builder().run(configPathname);
+            //System.setProperty(OPENAS2_LOG_LEVEL", "TRACE");
+            //executorService = Executors.newFixedThreadPool(20);
+
+            RestApiTest.serverInstance = new OpenAS2Server.Builder().run(RESOURCE.get("MyCompany", "config", "config.xml").getAbsolutePath());
         } catch (Throwable e) {
             // aid for debugging JUnit tests
             System.err.println("ERROR occurred: " + ExceptionUtils.getStackTrace(e));
