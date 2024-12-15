@@ -36,7 +36,7 @@ export default {
         username: '',
         password: '',
         server_input_type: (process.env.VUE_APP_HIDDEN_SERVER=='true')?'hidden':'text',
-        server: process.env.VUE_APP_ROOT_URL || 'http://127.0.0.1:8443/api',
+        server: process.env.VUE_APP_API_URL || 'http://127.0.0.1:8443/api',
         rememberme: false,
         loading: false,
         errormsg: '',
