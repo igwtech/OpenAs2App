@@ -5,7 +5,6 @@ const store = createStore({
     modules: {
         dashboardModule
       },
-    debug: true,
     state: {
         username: null,
         password: null,
