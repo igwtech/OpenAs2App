@@ -27,41 +27,42 @@
      </section>
 </div>
 </template>
-<script>
-export default {
-    name: 'object-list',
-    data: function() {
-        return {
-            loading: false,
-            info: [],
-            errored: false
-        };
-    },
-    props: {
-        src: {
-            type: Function,
-            required: true
-        }
-    },
-    watch: {
-        src: function() {
-            
-        }
-    },
-    async mounted() {
-        console.log('Mounting');
-        this.loading=true;
-        try {
-            var r=await this.src();
-            console.log('SRC:',r);
-            if(r!=null) this.info=r;
-        }catch(e) {
-            console.log(e);
-            this.errored=true;
-        } finally {
-            this.loading = false;
-        }
-    }
+<script lang="ts">
+import { defineComponent, ref, onMounted, PropType } from 'vue';
 
-}
+export default defineComponent({
+  name: 'object-list',
+  props: {
+    src: {
+      type: Function as PropType<() => Promise<any[]>>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const loading = ref(false);
+    const info = ref<any[]>([]);
+    const errored = ref(false);
+
+    onMounted(async () => {
+      console.log('Mounting');
+      loading.value = true;
+      try {
+        const result = await props.src();
+        console.log('SRC:', result);
+        if (result != null) info.value = result;
+      } catch (e) {
+        console.log(e);
+        errored.value = true;
+      } finally {
+        loading.value = false;
+      }
+    });
+
+    return {
+      loading,
+      info,
+      errored,
+    };
+  },
+});
 </script>
