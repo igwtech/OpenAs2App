@@ -56,33 +56,38 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
 import TopMenu from "./TopMenu";
 import TopMenuPhone from "./TopMenuPhone";
-
 import SideMenu from "./SideMenu";
-export default {
+
+export default defineComponent({
   name: "admin-layout",
-  data() {
-    return {
-      showMenu: true,
-    };
-  },
   components: {
     TopMenu,
     SideMenu,
     TopMenuPhone,
   },
-  methods: {
-    closedMenuMovil() {
-      this.showMenu = !this.showMenu;
-    },
-    openSidemenu(e) {
+  setup() {
+    const showMenu = ref(true);
+
+    const closedMenuMovil = () => {
+      showMenu.value = !showMenu.value;
+    };
+
+    const openSidemenu = (e: Event) => {
       e.preventDefault();
-      this.showMenu = !this.showMenu;
-    },
+      showMenu.value = !showMenu.value;
+    };
+
+    return {
+      showMenu,
+      closedMenuMovil,
+      openSidemenu,
+    };
   },
-};
+});
 </script>
 <style scoped>
 </style>
