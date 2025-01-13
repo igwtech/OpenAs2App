@@ -72,170 +72,158 @@
     </template>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, ref, computed, onMounted } from 'vue';
 import FormCustom from "./FormCustom";
 import TableCustom from "./TableCustom";
 import CertificateEditor from "./CertificateEditor";
 import Utils from "../utils";
 import Swal from "sweetalert2";
-var _ = require("lodash");
-export default {
-  data: function () {
-    return {
-      breadcrumbs: [
-        {
-          text: "Dashboard",
-          to: { name: "Dashboard" },
-          active: false,
-        },
-        {
-          text: "Certificates",
-          to: { name: "Certificates" },
-          active: true,
-        },
-      ],
-      schema: {
-        fields: [
-          {
-            type: "text",
-            name: "alias",
-            label: "Alias Name",
-            placeholder: "Certificate's Alias Name",
-            _validate: {
-              required: true,
-            },
-          },
-          // {
-          //   type: "textarea",
-          //   name: "data",
-          //   label: "PEM Data",
-          //   placeholder: "Trading Partner's AS2 ID",
-          //   _validate: {
-          //     required: true,
-          //   },
-          // },
-          {
-            type: "text",
-            name: "serial",
-            label: "Serial Number (HEX)",
-            placeholder: "Trading Partner's Email Address",
-            show: true,
-            disabled: true,
-            _validate: {
-              email: true,
-            },
-          },
-          {
-            type: "datepicker",
-            name: "validNotBefore",
-            label: "Valid Not Before",
-            placeholder: "Valid Not Before",
-            show: true,
-            disabled: true,
-            _validate: {},
-          },
-          {
-            type: "datepicker",
-            name: "validNotAfter",
-            label: "Expiration Date",
-            placeholder: "Expiration Date",
-            show: true,
+import _ from "lodash";
 
-            disabled: true,
-            _validate: {},
-          },
-          {
-            type: "text",
-            name: "subject",
-            label: "Subject",
-            placeholder: "Subject",
-            disabled: true,
-            show: true,
-            _validate: {},
-          },
-          {
-            type: "text",
-            name: "fingerPrint",
-            label: "Fingerprint (SHA1)",
-            placeholder: "Fingerprint (SHA1)",
-            show: true,
-            disabled: true,
-            _validate: {},
-          },
-          {
-            type: "file",
-            accept: ".pem",
-            name: "upload",
-            label: "Upload Certificate",
-            placeholder: "Upload Certificate",
-            _validate: {
-              required: true,
-              ext: "pem",
-            },
-          },
-        ],
-      },
-      fields: [
-        {
-          key: "key",
-          label: "#",
-          sortable: true,
-          class: "text-center",
-        },
-        {
-          key: "name",
-          label: "Certificate ID",
-          sortable: true,
-          class: "text-center",
-        },
-        { key: "actions", label: "Actions", class: "text-center" },
-      ],
-      infoModal: {
-        id: "info-modal",
-        title: "",
-      },
-      items: [],
-      item: {
-        _id: null,
-        alias: "",
-        data: "",
-        serial: "",
-        issuerNam: "",
-        validNotBefore: "",
-        validNotAfter: "",
-        subject: "",
-        fingerPrint: "",
-      },
-      loadingForm: false,
-      loadingTable: false,
-    };
-  },
+export default defineComponent({
+  name: "CertificatesAdmin",
   components: {
     FormCustom,
     TableCustom,
     CertificateEditor,
   },
-  computed: {
-    isPathPartnerList() {
-      return this.$route.name == "Certificates";
-    },
-  },
-  async mounted() {
-    var list = await Utils.Crud.getList("cert");
-    this.schema.fields[3].list = _.map(list, (item) => {
-      return { value: item, text: item };
+  setup() {
+    const breadcrumbs = ref([
+      {
+        text: "Dashboard",
+        to: { name: "Dashboard" },
+        active: false,
+      },
+      {
+        text: "Certificates",
+        to: { name: "Certificates" },
+        active: true,
+      },
+    ]);
+
+    const schema = ref({
+      fields: [
+        {
+          type: "text",
+          name: "alias",
+          label: "Alias Name",
+          placeholder: "Certificate's Alias Name",
+          _validate: {
+            required: true,
+          },
+        },
+        {
+          type: "text",
+          name: "serial",
+          label: "Serial Number (HEX)",
+          placeholder: "Trading Partner's Email Address",
+          show: true,
+          disabled: true,
+          _validate: {
+            email: true,
+          },
+        },
+        {
+          type: "datepicker",
+          name: "validNotBefore",
+          label: "Valid Not Before",
+          placeholder: "Valid Not Before",
+          show: true,
+          disabled: true,
+          _validate: {},
+        },
+        {
+          type: "datepicker",
+          name: "validNotAfter",
+          label: "Expiration Date",
+          placeholder: "Expiration Date",
+          show: true,
+          disabled: true,
+          _validate: {},
+        },
+        {
+          type: "text",
+          name: "subject",
+          label: "Subject",
+          placeholder: "Subject",
+          disabled: true,
+          show: true,
+          _validate: {},
+        },
+        {
+          type: "text",
+          name: "fingerPrint",
+          label: "Fingerprint (SHA1)",
+          placeholder: "Fingerprint (SHA1)",
+          show: true,
+          disabled: true,
+          _validate: {},
+        },
+        {
+          type: "file",
+          accept: ".pem",
+          name: "upload",
+          label: "Upload Certificate",
+          placeholder: "Upload Certificate",
+          _validate: {
+            required: true,
+            ext: "pem",
+          },
+        },
+      ],
     });
-    await this.getList();
-  },
-  methods: {
-    getObject: async function (index) {
-      var newObj = this.getNewObject();
-      var obj = await Utils.Crud.getObject("cert", index, newObj);
+
+    const fields = ref([
+      {
+        key: "key",
+        label: "#",
+        sortable: true,
+        class: "text-center",
+      },
+      {
+        key: "name",
+        label: "Certificate ID",
+        sortable: true,
+        class: "text-center",
+      },
+      { key: "actions", label: "Actions", class: "text-center" },
+    ]);
+
+    const infoModal = ref({
+      id: "info-modal",
+      title: "",
+    });
+
+    const items = ref<any[]>([]);
+    const item = ref({
+      _id: null,
+      alias: "",
+      data: "",
+      serial: "",
+      issuerNam: "",
+      validNotBefore: "",
+      validNotAfter: "",
+      subject: "",
+      fingerPrint: "",
+    });
+
+    const loadingForm = ref(false);
+    const loadingTable = ref(false);
+
+    const isPathPartnerList = computed(() => {
+      return this.$route.name == "Certificates";
+    });
+
+    const getObject = async (index: any) => {
+      const newObj = getNewObject();
+      const obj = await Utils.Crud.getObject("cert", index, newObj);
       return obj;
-    },
-    resetModal: function () {
-      this.infoModal.title = "";
-      this.item = {
+    };
+
+    const resetModal = () => {
+      infoModal.value.title = "";
+      item.value = {
         _id: null,
         alias: "",
         data: "",
@@ -246,23 +234,25 @@ export default {
         subject: "",
         fingerPrint: "",
       };
-      this.$root.$emit("bv::hide::modal", this.infoModal.id);
-      this.loadingForm = this.loadingTable = false;
-    },
-    async existCertificate(cert) {
+      this.$root.$emit("bv::hide::modal", infoModal.value.id);
+      loadingForm.value = loadingTable.value = false;
+    };
+
+    const existCertificate = async (cert: any) => {
       let exist = false;
       await Utils.Crud.getObjectFilter("partner", cert.key, cert)
-        .then((value) => {
+        .then(() => {
           exist = true;
         })
         .catch(() => {
           exist = false;
         });
       return exist;
-    },
-    deleteObject: async function (item) {
+    };
+
+    const deleteObject = async (item: any) => {
       try {
-        this.loadingTable = true;
+        loadingTable.value = true;
         Swal.fire({
           title: "Are you sure to delete?",
           html: `a cert  ${item.name}`,
@@ -272,12 +262,12 @@ export default {
           cancelButtonText: "No",
         }).then(async (result) => {
           if (result.isConfirmed) {
-            let exist = await this.existCertificate(item);
+            const exist = await existCertificate(item);
             if (!exist) {
               Utils.Crud.deleteObject("cert", item.key)
-                .then((response) => {
+                .then(() => {
                   Swal.fire("Deleted!", "", "success");
-                  this.getList();
+                  getList();
                 })
                 .catch((e) => {
                   console.log("delete parner", e);
@@ -291,16 +281,17 @@ export default {
               );
             }
           }
-          this.loadingTable = false;
+          loadingTable.value = false;
         });
       } catch (e) {
         console.log(e);
         Swal.fire("Error!", e, "error");
       }
-    },
-    newObject: function () {
-      this.infoModal.title = "New certificate";
-      this.item = {
+    };
+
+    const newObject = () => {
+      infoModal.value.title = "New certificate";
+      item.value = {
         _id: null,
         alias: "",
         data: "",
@@ -311,28 +302,31 @@ export default {
         subject: "",
         fingerPrint: "",
       };
-      this.schema.fields[this.schema.fields.length - 1]._validate = true;
-      this.$root.$emit("bv::show::modal", this.infoModal.id);
-    },
-    editObject: async function (_item) {
+      schema.value.fields[schema.value.fields.length - 1]._validate = true;
+      this.$root.$emit("bv::show::modal", infoModal.value.id);
+    };
+
+    const editObject = async (_item: any) => {
       console.log("item_edit", _item);
-      this.infoModal.title = "Edit certificate";
-      var newObj = this.getNewObject();
-      const result = await Utils.Crud.getObject("cert", _item.key, newObj);
+      infoModal.value.title = "Edit certificate";
+      const newObj = getNewObject();
+      const result = await getObject(_item.key);
       console.log("resutl al editar", result);
-      this.item = Object.assign(this.item, result);
-      this.changedCert();
-      this.schema.fields[this.schema.fields.length - 1]._validate = false;
-      this.$root.$emit("bv::show::modal", this.infoModal.id);
-    },
-    getNewObject: function () {
-      this.loadingTable = true;
-      var obj = { _id: null };
-      this.schema.fields.forEach((f) => (obj[f.name] = f.value));
+      item.value = Object.assign(item.value, result);
+      changedCert();
+      schema.value.fields[schema.value.fields.length - 1]._validate = false;
+      this.$root.$emit("bv::show::modal", infoModal.value.id);
+    };
+
+    const getNewObject = () => {
+      loadingTable.value = true;
+      const obj: any = { _id: null };
+      schema.value.fields.forEach((f) => (obj[f.name] = f.value));
       return obj;
-    },
-    getList: async function () {
-      this.items = await Utils.Crud.getList("cert").then((results) => {
+    };
+
+    const getList = async () => {
+      items.value = await Utils.Crud.getList("cert").then((results) => {
         return _.map(results, (item, index) => {
           return {
             key: index,
@@ -344,45 +338,41 @@ export default {
           };
         });
       });
-    },
-    saveObject: async function (data) {
-      this.loadingForm = this.loadingTable = true;
+    };
+
+    const saveObject = async (data: any) => {
+      loadingForm.value = loadingTable.value = true;
       try {
-        let _data = {
+        const _data = {
           _id: null,
           alias: data.alias,
           data: data.data,
         };
         console.log("Saving", data);
-        var old_id = data._id;
-        // delete data._id;
-        console.log("old_id", old_id);
+        const old_id = data._id;
         if (old_id !== null) {
           await Utils.Crud.deleteObject("cert", old_id).then(
-            async () =>
-              // this.importCertificate(data)
-              await Utils.Crud.importCertificate(_data)
+            async () => await Utils.Crud.importCertificate(_data)
           );
         } else {
           await Utils.Crud.importCertificate(_data);
         }
-        // await Utils.Crud.saveObject("cert", data);
-        this.resetModal();
-        await this.getList();
-        this.loadingForm = this.loadingTable = false;
+        resetModal();
+        await getList();
+        loadingForm.value = loadingTable.value = false;
       } catch (e) {
         Swal.fire("Error!", e, "error");
-        this.loadingForm = false;
+        loadingForm.value = false;
       }
-    },
-    fileUpload: function ({ file, e }) {
-      console.log("item.....", this.item);
-      var oFile = file;
+    };
+
+    const fileUpload = ({ file, e }: { file: File; e: Event }) => {
+      console.log("item.....", item.value);
+      const oFile = file;
       console.log(file);
-       // filter for certificate files
-       var rFilter = /\.(pem)$/i;
-       var fileName = oFile.name;
-       if (!rFilter.test(fileName)) {
+      const rFilter = /\.(pem)$/i;
+      const fileName = oFile.name;
+      if (!rFilter.test(fileName)) {
         alert("Error invalid file-type");
         return;
       }
@@ -390,38 +380,40 @@ export default {
         alert("Error unable to read file, empty?");
         return;
       }
-      var oReader = new FileReader();
-      var that = this;
+      const oReader = new FileReader();
       oReader.onload = function (e) {
-        console.log("edit---->", e.target.result);
-        var PEM = e.target.result;
+        console.log("edit---->", e.target?.result);
+        let PEM = e.target?.result as string;
         try {
-           PEM = PEM.replace("-----BEGIN CERTIFICATE-----", "").replace(
-            "-----END CERTIFICATE-----","");
-            PEM = PEM.replace(/[^A-Za-z0-9+/=]+/gm, "");
-            that.item.data = PEM;
-            that.changedCert();
-            console.log("Read certificate successfully")
+          PEM = PEM.replace("-----BEGIN CERTIFICATE-----", "").replace(
+            "-----END CERTIFICATE-----",
+            ""
+          );
+          PEM = PEM.replace(/[^A-Za-z0-9+/=]+/gm, "");
+          item.value.data = PEM;
+          changedCert();
+          console.log("Read certificate successfully");
         } catch (ex) {
-            console.log("Error reading certificate", ex)
-            alert("Error reading certificate");
-            return;
+          console.log("Error reading certificate", ex);
+          alert("Error reading certificate");
+          return;
         }
       };
       oReader.readAsText(oFile);
-    },
-    changedCert: function () {
-      var cert = new X509();
-      console.log("this.item.data", this.item.data);
-      var PEM = this.item.data;
-      console.log("item.....", this.item);
-      if (this.item.data == null) {
-        this.item.serial = "";
-        this.item.issuerName = "";
-        this.item.validNotBefore = null;
-        this.item.validNotAfter = null;
-        this.item.subject = "";
-        this.item.fingerPrint = "";
+    };
+
+    const changedCert = () => {
+      const cert = new X509();
+      console.log("this.item.data", item.value.data);
+      let PEM = item.value.data;
+      console.log("item.....", item.value);
+      if (item.value.data == null) {
+        item.value.serial = "";
+        item.value.issuerName = "";
+        item.value.validNotBefore = null;
+        item.value.validNotAfter = null;
+        item.value.subject = "";
+        item.value.fingerPrint = "";
         return;
       }
       if (PEM.substr(0, 4) !== "----") {
@@ -431,17 +423,48 @@ export default {
 
       console.log("PEM changedCert", PEM);
       cert.readCertPEM(PEM);
-      this.item.serial = cert.getSerialNumberHex();
-      this.item.issuerName = cert.getIssuerString();
-      this.item.validNotBefore = zulutodate(cert.getNotBefore());
-      this.item.validNotAfter = zulutodate(cert.getNotAfter());
-      this.item.subject = cert.getSubjectString();
-      this.item.fingerPrint = KJUR.crypto.Util.hashHex(cert.hex, "sha1");
-      console.log("item changedCert", this.item);
+      item.value.serial = cert.getSerialNumberHex();
+      item.value.issuerName = cert.getIssuerString();
+      item.value.validNotBefore = zulutodate(cert.getNotBefore());
+      item.value.validNotAfter = zulutodate(cert.getNotAfter());
+      item.value.subject = cert.getSubjectString();
+      item.value.fingerPrint = KJUR.crypto.Util.hashHex(cert.hex, "sha1");
+      console.log("item changedCert", item.value);
       console.log("cert changedCert", cert);
-    },
+    };
+
+    onMounted(async () => {
+      const list = await Utils.Crud.getList("cert");
+      schema.value.fields[3].list = _.map(list, (item) => {
+        return { value: item, text: item };
+      });
+      await getList();
+    });
+
+    return {
+      breadcrumbs,
+      schema,
+      fields,
+      infoModal,
+      items,
+      item,
+      loadingForm,
+      loadingTable,
+      isPathPartnerList,
+      getObject,
+      resetModal,
+      existCertificate,
+      deleteObject,
+      newObject,
+      editObject,
+      getNewObject,
+      getList,
+      saveObject,
+      fileUpload,
+      changedCert,
+    };
   },
-};
+});
 </script>
 <style >
 </style>
