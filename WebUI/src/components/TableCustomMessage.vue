@@ -117,39 +117,18 @@
   </div>
 </template>
 
-<script>
-var momenttz = require('moment-timezone');
-export default {
-  data() {
-    return {
-      totalRows: 1,
-      currentPage: 1,
-      perPage: 10,
-      pageOptions: [10, 25, 50, { value: 100, text: "Show a lot" }],
-      sortBy: "key",
-      sortDesc: false,
-      sortDirection: "asc",
-      filterOn: [],
-      selectVal: {
-         key: "",
-          state: "",
-          timestamp: "",
-          location: "",
-          message: "",
-          payload: "",
-          encryption: "",
-          signature: "",
-          mdn: "",
-      },
-    };
-  },
+<script lang="ts">
+import { defineComponent, ref, computed, PropType, onMounted } from 'vue';
+import momenttz from 'moment-timezone';
+
+export default defineComponent({
   props: {
     items: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true,
     },
     fields: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true,
     },
     showFilter: {
@@ -157,62 +136,100 @@ export default {
       default: true,
     },
     filter: {
-      type: Object,
-      // default: {
-      //   text: "",
-      // },
-      default: () => {return {text:""}},
+      type: Object as PropType<{ text: string }>,
+      default: () => ({ text: "" }),
     },
-    stateMap:{
-      type:Object
-    }
+    stateMap: {
+      type: Object as PropType<Record<string, string[]>>,
+      required: true,
+    },
   },
-  computed: {
-    filteredItems() {
-      return this.items.filter((item) => {
+  setup(props, { emit }) {
+    const totalRows = ref(1);
+    const currentPage = ref(1);
+    const perPage = ref(10);
+    const pageOptions = ref([10, 25, 50, { value: 100, text: "Show a lot" }]);
+    const sortBy = ref("key");
+    const sortDesc = ref(false);
+    const sortDirection = ref("asc");
+    const filterOn = ref<string[]>([]);
+    const selectVal = ref<Record<string, string>>({
+      key: "",
+      state: "",
+      timestamp: "",
+      location: "",
+      message: "",
+      payload: "",
+      encryption: "",
+      signature: "",
+      mdn: "",
+    });
+
+    const filteredItems = computed(() => {
+      return props.items.filter((item) => {
         let keep = true;
-        this.fields.forEach((key) => {
+        props.fields.forEach((key) => {
           keep =
             keep &&
-            (this.selectVal[key] === undefined ||
-              item[key] === this.selectVal[key]);
+            (selectVal.value[key] === undefined ||
+              item[key] === selectVal.value[key]);
         });
         return keep;
       });
-    },
-    options() {
-      // This could be simplified if the select was it's own component.
-      const options = {};
-      this.fields.forEach((key) => {
-        const vals = this.items.map((item) => item[key]);
-        // Cheap and efficient unique.
+    });
+
+    const options = computed(() => {
+      const options: Record<string, any[]> = {};
+      props.fields.forEach((key) => {
+        const vals = props.items.map((item) => item[key]);
         options[key] = Array.from(new Set(vals));
       });
-
       return options;
-    },
-  },
-  async mounted() {
-    this.totalRows = this.filteredItems.length;
-  },
-  methods: {
-    showTime(create_dt){
-      return momenttz.tz(create_dt, "America/New_York")
-    },
-    editItem: function (item) {
-      this.$emit("editObject", item);
-    },
-    showItem: function (item) {
-      this.$emit("showObject", item);
-    },
-    deleteItem: function (item) {
-      this.$emit("deleteObject", item);
-    },
-    onFiltered: function (filteredItems) {
+    });
 
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
+    const showTime = (create_dt: string) => {
+      return momenttz.tz(create_dt, "America/New_York");
+    };
+
+    const editItem = (item: any) => {
+      emit("editObject", item);
+    };
+
+    const showItem = (item: any) => {
+      emit("showObject", item);
+    };
+
+    const deleteItem = (item: any) => {
+      emit("deleteObject", item);
+    };
+
+    const onFiltered = (filteredItems: any[]) => {
+      totalRows.value = filteredItems.length;
+      currentPage.value = 1;
+    };
+
+    onMounted(() => {
+      totalRows.value = filteredItems.value.length;
+    });
+
+    return {
+      totalRows,
+      currentPage,
+      perPage,
+      pageOptions,
+      sortBy,
+      sortDesc,
+      sortDirection,
+      filterOn,
+      selectVal,
+      filteredItems,
+      options,
+      showTime,
+      editItem,
+      showItem,
+      deleteItem,
+      onFiltered,
+    };
   },
-};
+});
 </script>
