@@ -28,57 +28,61 @@
     </div>
   </nav> -->
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, ref, computed, PropType } from 'vue';
 import router from "../routes";
-export default {
+
+export default defineComponent({
   name: "side-menu",
-  data: function () {
-    //console.log(router.options.routes);
-    return {
-      routes: router.options.routes.filter((e) =>
-        e.meta != null ? e.meta.sidemenu : false
-      ),
-    };
-  },
   props: {
     showMenu: {
       type: Boolean,
       default: true,
     },
   },
-  computed: {
-    actualRoute() {
-      return this.$route.name;
-    },
-  },
-  methods: {
-    getIcons(routeName) {
-      let icon="house"
+  setup(props) {
+    const routes = ref(
+      router.options.routes.filter((e) =>
+        e.meta != null ? e.meta.sidemenu : false
+      )
+    );
+
+    const actualRoute = computed(() => {
+      return router.currentRoute.value.name;
+    });
+
+    const getIcons = (routeName: string) => {
+      let icon = "house";
       switch (routeName) {
         case "Dashboard":
-          icon="graph-up"
+          icon = "graph-up";
           break;
-          case "Partners":
-            icon="person"
-            
-            break;
-          case "Connections":
-            icon="people"
-            break;
-          case "Certificates":
-            icon="file-earmark-richtext"
-            break;
-            case "Messages":
-            icon="chat-right-dots"
-            break;
+        case "Partners":
+          icon = "person";
+          break;
+        case "Connections":
+          icon = "people";
+          break;
+        case "Certificates":
+          icon = "file-earmark-richtext";
+          break;
+        case "Messages":
+          icon = "chat-right-dots";
+          break;
         default:
-          icon="house"
+          icon = "house";
           break;
       }
-          return icon
-    }
+      return icon;
+    };
+
+    return {
+      routes,
+      actualRoute,
+      getIcons,
+    };
   },
-};
+});
 </script>
 <style>
 /*
