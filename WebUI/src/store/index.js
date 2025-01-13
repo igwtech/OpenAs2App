@@ -1,11 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import dashboardModule from './modules/dashboard.module.js';
 
-Vue.use(Vuex)
-
-
-const store = new Vuex.Store({
+const store = createStore({
     modules: {
         dashboardModule
       },
