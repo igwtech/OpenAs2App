@@ -1,14 +1,12 @@
 <template>
-<v-app>
-  <div id="app" class="container-fluid">
-    <div v-if="is_logged">
-      <admin-layout/>
-    </div>
-    <div v-else >
-      <login-screen />
-    </div>
+<div id="app" class="container-fluid">
+  <div v-if="is_logged">
+    <admin-layout/>
   </div>
-</v-app>
+  <div v-else >
+    <login-screen />
+  </div>
+</div>
 </template>
 
 <script lang="ts">

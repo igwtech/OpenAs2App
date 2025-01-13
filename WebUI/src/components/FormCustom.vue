@@ -1,8 +1,8 @@
 <template>
-  <b-form @submit.stop.prevent="submitForm">
+  <shadcn-form @submit.stop.prevent="submitForm">
     <template v-for="(field, index) in schema.fields">
       <template v-if="field.type === 'select'">
-        <b-form-group
+        <shadcn-form-group
           v-if="field.show!=undefined?field.show:true"
           :key="index"
           :id="`type-${field.name}`"
@@ -10,7 +10,7 @@
           :label-for="field.name"
         >
           <!-- :value-field="field.value ? field.value : 'hh'" -->
-          <b-form-select
+          <shadcn-form-select
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
             :name="field.name"
@@ -23,7 +23,7 @@
             :options="field.list"
             :aria-describedby="`${field.name}-feedback`"
           ></b-form-select>
-          <b-form-invalid-feedback :id="`${field.name}-feedback`">{{
+          <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
           }}</b-form-invalid-feedback>
         </b-form-group>
@@ -37,7 +37,7 @@
           :label-for="field.name"
         >
           <!-- :value-field="field.value ? field.value : 'hh'" -->
-          <b-form-textarea
+          <shadcn-form-textarea
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
             :name="field.name"
@@ -64,7 +64,7 @@
           :label="field.label"
           :label-for="field.name"
         >
-          <b-form-datepicker
+          <shadcn-form-datepicker
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
             :name="field.name"
@@ -89,7 +89,7 @@
           :label="field.label"
           :label-for="field.name"
         >
-          <b-form-file
+          <shadcn-form-file
             :accept="field.accept?field.accept:'*'"
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
@@ -116,7 +116,7 @@
           :label-for="field.name"
         >
           <!-- :label="field.label" -->
-          <b-form-checkbox
+          <shadcn-form-checkbox
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
             v-model="model[field.name]"
@@ -142,7 +142,7 @@
           :label="field.label"
           :label-for="field.name"
         >
-          <b-form-input
+          <shadcn-form-input
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
             v-model="model[field.name]"
@@ -160,15 +160,13 @@
         </b-form-group>
       </template>
     </template>
-    <b-row>
-      <!-- <b-col col > -->
-      <b-button-group>
-        <b-button :disabled="loading" type="submit" variant="success" size="sm">Save</b-button>
-        <b-button :disabled="loading" @click="cancelForm" size="sm">Cancel</b-button>
-      </b-button-group>
-      <!-- </b-col> -->
-    </b-row>
-  </b-form>
+    <shadcn-row>
+      <shadcn-button-group>
+        <shadcn-button :disabled="loading" type="submit" variant="success" size="sm">Save</shadcn-button>
+        <shadcn-button :disabled="loading" @click="cancelForm" size="sm">Cancel</shadcn-button>
+      </shadcn-button-group>
+    </shadcn-row>
+  </shadcn-form>
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed, PropType } from 'vue';

@@ -1,6 +1,6 @@
 <template>
   <div id="dashboard">
-    <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
+    <shadcn-breadcrumb :items="breadcrumbs"></shadcn-breadcrumb>
 
     <div
       class="
@@ -17,25 +17,24 @@
 
       <h1 class="h2">Dashboard</h1>
     </div>
-    <b-row>
+    <shadcn-row>
       <!-- <b-card-group deck> -->
-      <b-col md="4">
-        <b-card
+      <shadcn-col md="4">
+        <shadcn-card
           bg-variant="warning"
           text-variant="white"
           header="Total Partners"
           class="text-center mt-1"
         >
-          <b-card-text
-            > <b-row align-h="between">
-              <b-col> <b-icon icon="person" font-scale="3 "></b-icon></b-col>
-              <b-col>
-                <h1>{{ countPartners }}</h1></b-col
-              >
-            </b-row></b-card-text
-          >
-        </b-card>
-      </b-col>
+          <shadcn-card-text>
+            <shadcn-row align-h="between">
+              <shadcn-col> <shadcn-icon icon="person" font-scale="3 "></shadcn-icon></shadcn-col>
+              <shadcn-col>
+                <h1>{{ countPartners }}</h1></shadcn-col>
+            </shadcn-row>
+          </shadcn-card-text>
+        </shadcn-card>
+      </shadcn-col>
       <b-col md="4">
         <b-card
           bg-variant="dark"
@@ -73,15 +72,15 @@
         </b-card>
       </b-col>
       <!-- </b-card-group> -->
-      <b-row class="justify-content-md-center mt-3">
-        <b-col md="4">
-          <date-range-picker
+      <shadcn-row class="justify-content-md-center mt-3">
+        <shadcn-col md="4">
+          <shadcn-date-range-picker
             @update="changeDate"
             v-model="dateRange"
             opens="left"
-          ></date-range-picker>
-        </b-col>
-      </b-row>
+          ></shadcn-date-range-picker>
+        </shadcn-col>
+      </shadcn-row>
       <!-- <b-col class="mt-3" :md="length < 15 ? '6' : '12'">
         <chart-line-two
           :labels="dates"
