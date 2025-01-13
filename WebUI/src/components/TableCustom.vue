@@ -122,27 +122,17 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      totalRows: 1,
-      currentPage: 1,
-      perPage: 10,
-      pageOptions: [10, 25, 50, { value: 100, text: "Show a lot" }],
-      sortBy: "",
-      sortDesc: false,
-      sortDirection: "asc",
-      filterOn: [],
-    };
-  },
+<script lang="ts">
+import { defineComponent, ref, computed, PropType } from 'vue';
+
+export default defineComponent({
   props: {
     items: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true,
     },
     fields: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true,
     },
     showFilter: {
@@ -150,33 +140,58 @@ export default {
       default: true,
     },
     filter: {
-      type: Object,
-      default(rawProps) {
-        return { text: "" };
-      },
+      type: Object as PropType<{ text: string }>,
+      default: () => ({ text: "" }),
     },
     loading: {
       type: Boolean,
       default: false,
     },
   },
-  async mounted() {
+  setup(props, { emit }) {
+    const totalRows = ref(1);
+    const currentPage = ref(1);
+    const perPage = ref(10);
+    const pageOptions = ref([10, 25, 50, { value: 100, text: "Show a lot" }]);
+    const sortBy = ref("");
+    const sortDesc = ref(false);
+    const sortDirection = ref("asc");
+    const filterOn = ref<string[]>([]);
+
+    const editItem = (item: any) => {
+      emit("editObject", item);
+    };
+
+    const showItem = (item: any) => {
+      emit("showObject", item);
+    };
+
+    const deleteItem = (item: any) => {
+      emit("deleteObject", item);
+    };
+
+    const onFiltered = (filteredItems: any[]) => {
+      totalRows.value = filteredItems.length;
+      currentPage.value = 1;
+    };
+
+    return {
+      totalRows,
+      currentPage,
+      perPage,
+      pageOptions,
+      sortBy,
+      sortDesc,
+      sortDirection,
+      filterOn,
+      editItem,
+      showItem,
+      deleteItem,
+      onFiltered,
+    };
+  },
+  mounted() {
     this.totalRows = this.items.length;
   },
-  methods: {
-    editItem: function (item) {
-      this.$emit("editObject", item);
-    },
-    showItem: function (item) {
-      this.$emit("showObject", item);
-    },
-    deleteItem: function (item) {
-      this.$emit("deleteObject", item);
-    },
-    onFiltered: function (filteredItems) {
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
-  },
-};
+});
 </script>
