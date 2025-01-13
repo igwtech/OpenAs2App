@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { Bar } from "vue-chartjs/legacy";
+import 'chart.js/auto';
+import { Bar } from "vue-chartjs";
 
 import {
   Chart as ChartJS,

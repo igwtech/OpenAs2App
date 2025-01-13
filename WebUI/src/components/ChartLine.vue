@@ -13,7 +13,8 @@
 </template>
 
 <script>
-import { Line as LineChartGenerator } from "vue-chartjs/legacy";
+import 'chart.js/auto';
+import { Line as LineChartGenerator } from "vue-chartjs";
 import moment from "moment";
 import {
   Chart as ChartJS,
