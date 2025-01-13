@@ -1,6 +1,6 @@
 <template>
   <div id="certificates">
-    <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
+    <shadcn-breadcrumb :items="breadcrumbs"></shadcn-breadcrumb>
     <div
       class="
         d-flex
@@ -16,12 +16,12 @@
       <h1 class="h2">Certificates</h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-          <b-button
+          <shadcn-button
             v-if="isPathPartnerList"
             @click="newObject()"
             variant="success"
             size="sm"
-            >New</b-button
+            >New</shadcn-button
           >
           <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Export</button> -->
         </div>
@@ -48,7 +48,7 @@
         @deleteObject="deleteObject"
         @editObject="editObject"
       ></table-custom>
-      <b-modal
+      <shadcn-modal
         hide-footer
         :id="infoModal.id"
         :title="infoModal.title"
@@ -68,7 +68,7 @@
           @fileUpload="fileUpload"
         >
         </form-custom>
-      </b-modal>
+      </shadcn-modal>
     </template>
   </div>
 </template>

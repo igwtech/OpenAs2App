@@ -1,6 +1,6 @@
 <template>
   <div id="messages">
-    <b-breadcrumb v-if="isPathMessageList" :items="breadcrumbs"></b-breadcrumb>
+    <shadcn-breadcrumb v-if="isPathMessageList" :items="breadcrumbs"></shadcn-breadcrumb>
     <div
       class="
         d-flex
@@ -17,22 +17,22 @@
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
           <!-- @click="newObject()" -->
-          <b-button
+          <shadcn-button
             v-if="isPathMessageList"
             @click="getList()"
             variant="primary"
             size="sm"
           >
             <b-icon icon="arrow-repeat"></b-icon>
-            Refresh</b-button
+            Refresh</shadcn-button
           >
-          <b-button @click="exportPdf" variant="danger" size="sm">
-            <b-icon icon="file-earmark-pdf-fill"></b-icon>
-            Export</b-button
+          <shadcn-button @click="exportPdf" variant="danger" size="sm">
+            <shadcn-icon icon="file-earmark-pdf-fill"></shadcn-icon>
+            Export</shadcn-button
           >
-          <b-button @click="exportExcel" variant="success" size="sm">
-            <b-icon icon="file-earmark-excel-fill"></b-icon>
-            Export</b-button
+          <shadcn-button @click="exportExcel" variant="success" size="sm">
+            <shadcn-icon icon="file-earmark-excel-fill"></shadcn-icon>
+            Export</shadcn-button
           >
           <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Export</button> -->
         </div>
@@ -59,7 +59,7 @@
         </div>
       </table-custom-message>
     </div>
-    <b-modal hide-footer :id="infoModal.id" :title="infoModal.title" ok-only>
+    <shadcn-modal hide-footer :id="infoModal.id" :title="infoModal.title" ok-only>
       <form-custom
         v-if="infoModal.title"
         title="Message Editor"
@@ -69,7 +69,7 @@
         @revert="resetModal"
       >
       </form-custom>
-    </b-modal>
+    </shadcn-modal>
   </div>
 </template>
 <script lang="ts">

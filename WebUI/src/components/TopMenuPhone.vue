@@ -3,12 +3,12 @@
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
       <div class="d-flex justify-content-between display-menu2">
         <span>OpenAS2</span>
-        <b-icon
+        <shadcn-icon
           @click="openSidemenu"
           font-scale="1.5"
           class="p-2"
           icon="menu-button-wide"
-        ></b-icon>
+        ></shadcn-icon>
       </div>
     </a>
     <ul class="navbar-nav px-3">
@@ -29,10 +29,10 @@
             </router-link>
           </li>
           <li @click="showLogout=!showLogout" class="nav-item text-rap pb-2">
-            <b-avatar variant="primary" :text="abbreviationName" size="sm"></b-avatar>
+            <shadcn-avatar variant="primary" :text="abbreviationName" size="sm"></shadcn-avatar>
             <small class="mx-2 text-white">{{userName}}</small>
-            <b-icon v-if="!showLogout"  variant="white" icon="caret-down-fill"></b-icon>
-            <b-icon v-else variant="white" icon="caret-up-fill"></b-icon>
+            <shadcn-icon v-if="!showLogout"  variant="white" icon="caret-down-fill"></shadcn-icon>
+            <shadcn-icon v-else variant="white" icon="caret-up-fill"></shadcn-icon>
           </li>
           <li v-if="showLogout">
             <a class="nav-link pl-3" href="#" v-on:click="logout">Sign out</a>

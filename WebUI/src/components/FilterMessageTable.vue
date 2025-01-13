@@ -1,17 +1,17 @@
 <template>
   <div>
-    <b-row>
-      <b-col v-for="(location,index) in filterField.locations" :key="index" sm="6" md="2" lg="2">
-        <b-form-group   :id="location.name" :label="location.label" :label-for="location.name">
-          <b-form-select
+    <shadcn-row>
+      <shadcn-col v-for="(location,index) in filterField.locations" :key="index" sm="6" md="2" lg="2">
+        <shadcn-form-group   :id="location.name" :label="location.label" :label-for="location.name">
+          <shadcn-form-select
             :id="location.name"
             :name="location.name"
             v-model="filter[location.name]"
             placeholder=""
             :options="location.list"
-          ></b-form-select>
-        </b-form-group>
-      </b-col>
+          ></shadcn-form-select>
+        </shadcn-form-group>
+      </shadcn-col>
       <!-- <b-col sm="6" md="2" lg="2">
         <b-form-group
           id="location"
@@ -29,10 +29,9 @@
         </b-form-group>
       </b-col> -->
 
-      <b-col sm="6" md="3" lg="3">
-        <!-- label="Form-checkbox-group inline checkboxes (default)" -->
-        <b-form-group v-slot="{ ariaDescribedby }">
-          <b-form-checkbox-group
+      <shadcn-col sm="6" md="3" lg="3">
+        <shadcn-form-group v-slot="{ ariaDescribedby }">
+          <shadcn-form-checkbox-group
             @change="filterItems('states')"
             v-model="filter.states"
             :aria-describedby="ariaDescribedby"
@@ -40,21 +39,21 @@
             stacked
           >
             <!-- :options="listDisplay" -->
-            <b-form-checkbox
+            <shadcn-form-checkbox
               v-for="(display, index) in filterField.states"
               :key="index"
               :value="display.value"
             >
-              <b-badge :variant="display.badge">{{
+              <shadcn-badge :variant="display.badge">{{
                 display.text
-              }}</b-badge></b-form-checkbox
+              }}</shadcn-badge></shadcn-form-checkbox
             >
-          </b-form-checkbox-group>
-        </b-form-group>
-      </b-col>
-      <b-col sm="6" md="4" lg="4">
-        <b-form-group label="Date/time display" v-slot="{ ariaDescribedby }">
-          <b-form-radio
+          </shadcn-form-checkbox-group>
+        </shadcn-form-group>
+      </shadcn-col>
+      <shadcn-col sm="6" md="4" lg="4">
+        <shadcn-form-group label="Date/time display" v-slot="{ ariaDescribedby }">
+          <shadcn-form-radio
             @change="filterItems('dateTime')"
             v-for="(item, index) in filterField.dateTimes"
             :key="index"

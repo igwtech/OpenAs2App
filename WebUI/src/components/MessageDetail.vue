@@ -1,11 +1,11 @@
 <template>
   <div id="message-detail">
-    <b-breadcrumb :items="breadcrumbs"></b-breadcrumb>
-    <b-card>
-      <b-badge variant="danger">E</b-badge> PAEBSA-A2 -> PAEBSA_OLD
+    <shadcn-breadcrumb :items="breadcrumbs"></shadcn-breadcrumb>
+    <shadcn-card>
+      <shadcn-badge variant="danger">E</shadcn-badge> PAEBSA-A2 -> PAEBSA_OLD
       <span class="text-danger">[process error:unknown-trading-parnetr] </span>
       <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsam,</p>
-    </b-card>
+    </shadcn-card>
     <table-custom
       :items="items2"
       :fields="fields"
@@ -13,16 +13,16 @@
       @deleteObject="deleteObject"
       @editObject="editObject"
     ></table-custom>
-    <b-card>
-      <b-tabs content-class="mt-3">
-        <b-tab title="Log" active>
+    <shadcn-card>
+      <shadcn-tabs content-class="mt-3">
+        <shadcn-tab title="Log" active>
           <small class="text-success">[5/5/22, 3:34:04 AM] [mendAS2-CO3SSQ-1651692834643-0@PAEBSA-AS2_PAEBSA_OLD] Inbound transmission is a AS2 message. It has not been processed because of a trading partner identification problem. </small><br>
           <small class="text-success">[5/5/22, 3:34:04 AM] [mendAS2-CO3SSQ-1651692834643-0@PAEBSA-AS2_PAEBSA_OLD] Generating outbound MDN, setting message id to "mendAS2-1RRNH2W1651692844972-5@PAEBSA_OLD_PAEBSA-AS2". </small><br>
           <small class="text-danger">[5/5/22, 3:34:04 AM] [mendAS2-1RRNH2W-1651692844972-5@PAEBSA_OLD_PAEBSA-AS2] Outbound MDN created for AS2 message "mendAS2-CO3SSQ1651692834643-0@PAEBSA-AS2_PAEBSA_OLD", state set to [processed/error: unknown-trading-partner]. </small><br>
           <small class="text-success">[5/5/22, 3:34:04 AM] [mendAS2-CO3SSQ-1651692834643-0@PAEBSA-AS2_PAEBSA_OLD] Outbound MDN details: Sender AS2 id PAEBSA-AS2 is unknown. </small><br>
           <small class="text-warning">[5/5/22, 3:34:04 AM] [mendAS2-1RRNH2W-1651692844972-5@PAEBSA_OLD_PAEBSA-AS2] Synchronous MDN sent as answer to message mendAS2-CO3SSQ1651692834643-0 @PAEBSA-AS2_PAEBSA_OLD.</small>
-        </b-tab>
-        <b-tab title="Raw message decrypted">
+        </shadcn-tab>
+        <shadcn-tab title="Raw message decrypted">
           <pre>
 Content-Type: multipart/report; report-type=disposition-notification; boundary="---=_Part_22_1351266340.1651692844973"
 Date: Wed, 4 May 2022 21:34:04 +0200 (CEST)
@@ -38,8 +38,8 @@ Final-Recipient: rfc822; PAEBSA_OLD
 Original-Message-ID: `` endAS2-CO3SSQ-1651692834643-0@PAEBSA-AS2_PAEBSA_OLD 
 "
            </pre>
-        </b-tab>
-        <b-tab title="Message header">
+        </shadcn-tab>
+        <shadcn-tab title="Message header">
           <small> 
             <pre>
 mime-version = 1.0 
@@ -56,9 +56,9 @@ as2-from = PAEBSA_OLD
 
             </pre>
         </small>
-        </b-tab>
-      </b-tabs>
-    </b-card>
+        </shadcn-tab>
+      </shadcn-tabs>
+    </shadcn-card>
   </div>
 </template>
 <script lang="ts">

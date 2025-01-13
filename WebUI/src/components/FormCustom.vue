@@ -22,14 +22,14 @@
             :data-vv-as="field.label"
             :options="field.list"
             :aria-describedby="`${field.name}-feedback`"
-          ></b-form-select>
+          ></shadcn-form-select>
           <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
           }}</b-form-invalid-feedback>
-        </b-form-group>
+        </shadcn-form-group>
       </template>
       <template v-else-if="field.type === 'textarea'">
-        <b-form-group
+        <shadcn-form-group
           v-if="field.show!=undefined?field.show:true"
           :key="index"
           :id="`type-${field.name}`"
@@ -50,14 +50,14 @@
             :aria-describedby="`${field.name}-feedback`"
             rows="5"
             max-rows="6"
-          ></b-form-textarea>
-          <b-form-invalid-feedback :id="`${field.name}-feedback`">{{
+          ></shadcn-form-textarea>
+          <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
           }}</b-form-invalid-feedback>
-        </b-form-group>
+        </shadcn-form-group>
       </template>
       <template v-else-if="field.type === 'datepicker'">
-        <b-form-group
+        <shadcn-form-group
           v-if="field.show!=undefined?field.show:true"
           :key="index"
           :id="`type-${field.name}`"
@@ -75,14 +75,14 @@
             :data-vv-as="field.label"
             :options="field.list"
             :aria-describedby="`${field.name}-feedback`"
-          ></b-form-datepicker>
-          <b-form-invalid-feedback :id="`${field.name}-feedback`">{{
+          ></shadcn-form-datepicker>
+          <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
           }}</b-form-invalid-feedback>
-        </b-form-group>
+        </shadcn-form-group>
       </template>
       <template v-else-if="field.type === 'file'">
-        <b-form-group
+        <shadcn-form-group
           v-if="field.show!=undefined?field.show:true"
           :key="index"
           :id="`type-${field.name}`"
@@ -102,14 +102,14 @@
             :options="field.list"
             :aria-describedby="`${field.name}-feedback`"
             @change="fileUpload"
-          ></b-form-file>
-          <b-form-invalid-feedback :id="`${field.name}-feedback`">{{
+          ></shadcn-form-file>
+          <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
           }}</b-form-invalid-feedback>
-        </b-form-group>
+        </shadcn-form-group>
       </template>
       <template v-else-if="field.type === 'checkbox'">
-        <b-form-group
+        <shadcn-form-group
           v-if="field.show!=undefined?field.show:true"
           :key="index"
           :id="`type-${field.name}`"
@@ -127,15 +127,15 @@
             :state="validateState(field.name)"
             :data-vv-as="field.label"
             :aria-describedby="`${field.name}-feedback`"
-            >{{ field.label }}</b-form-checkbox
+            >{{ field.label }}</shadcn-form-checkbox
           >
-          <b-form-invalid-feedback :id="`${field.name}-feedback`">{{
+          <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
           }}</b-form-invalid-feedback>
-        </b-form-group>
+        </shadcn-form-group>
       </template>
       <template v-else>
-        <b-form-group
+        <shadcn-form-group
           v-if="field.show!=undefined?field.show:true"
           :key="index"
           :id="`type-${field.name}`"
@@ -153,11 +153,11 @@
             :state="validateState(field.name)"
             :data-vv-as="field.label"
             :aria-describedby="`${field.name}-feedback`"
-          ></b-form-input>
-          <b-form-invalid-feedback :id="`${field.name}-feedback`">{{
+          ></shadcn-form-input>
+          <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
           }}</b-form-invalid-feedback>
-        </b-form-group>
+        </shadcn-form-group>
       </template>
     </template>
     <shadcn-row>

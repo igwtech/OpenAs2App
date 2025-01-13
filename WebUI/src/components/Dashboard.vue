@@ -35,42 +35,38 @@
           </shadcn-card-text>
         </shadcn-card>
       </shadcn-col>
-      <b-col md="4">
-        <b-card
+      <shadcn-col md="4">
+        <shadcn-card
           bg-variant="dark"
           text-variant="white"
           header="Total Connections"
           class="text-center mt-1"
         >
-          <b-card-text>
-            <b-row align-h="between">
-              <b-col> <b-icon icon="people" font-scale="3 "></b-icon></b-col>
-              <b-col>
-                <h1>{{ countPartnerships }}</h1></b-col
-              >
-            </b-row>
-          </b-card-text>
-        </b-card>
-      </b-col>
-      <b-col md="4">
-        <b-card
+          <shadcn-card-text>
+            <shadcn-row align-h="between">
+              <shadcn-col> <shadcn-icon icon="people" font-scale="3 "></shadcn-icon></shadcn-col>
+              <shadcn-col>
+                <h1>{{ countPartnerships }}</h1></shadcn-col>
+            </shadcn-row>
+          </shadcn-card-text>
+        </shadcn-card>
+      </shadcn-col>
+      <shadcn-col md="4">
+        <shadcn-card
           bg-variant="info"
           text-variant="white" 
           header="Total Certificates"
           class="text-center mt-1"
         >
-          <b-card-text
-            >
-            <b-row align-h="between">
-              <b-col> <b-icon icon="file-earmark-richtext" font-scale="3 "></b-icon></b-col>
-              <b-col>
-                <h1>{{countCertificates  }}</h1></b-col
-              >
-            </b-row>
-            </b-card-text
-          >
-        </b-card>
-      </b-col>
+          <shadcn-card-text>
+            <shadcn-row align-h="between">
+              <shadcn-col> <shadcn-icon icon="file-earmark-richtext" font-scale="3 "></shadcn-icon></shadcn-col>
+              <shadcn-col>
+                <h1>{{countCertificates  }}</h1></shadcn-col>
+            </shadcn-row>
+          </shadcn-card-text>
+        </shadcn-card>
+      </shadcn-col>
       <!-- </b-card-group> -->
       <shadcn-row class="justify-content-md-center mt-3">
         <shadcn-col md="4">
@@ -90,14 +86,14 @@
         >
         </chart-line-two>
       </b-col> -->
-      <b-col class="mt-3" :md="dataChart['sent'].valuesX.length < 15 ? '6' : '12'">
+      <shadcn-col class="mt-3" :md="dataChart['sent'].valuesX.length < 15 ? '6' : '12'">
         <chart-line
           :labels="dataChart['sent'].valuesX"
           :datasets="allState"
         >
         </chart-line>
-      </b-col>
-      <b-col
+      </shadcn-col>
+      <shadcn-col
         v-for="(state, index) in states"
         :key="index"
         class="mt-3"
@@ -109,9 +105,9 @@
           :title="dataChart[state].valuesX.label"
         >
         </chart-bar>
-      </b-col>
+      </shadcn-col>
       <messages-admin></messages-admin>
-    </b-row>
+    </shadcn-row>
   </div>
 </template>
 <style scoped>

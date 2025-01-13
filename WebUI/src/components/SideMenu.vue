@@ -1,14 +1,14 @@
 <template>
-  <b-list-group v-if="showMenu" flush>
-      <b-list-group-item  :key="route.path" v-for="route in routes"
+  <shadcn-list-group v-if="showMenu" flush>
+      <shadcn-list-group-item  :key="route.path" v-for="route in routes"
           :to="route.path"
           :active="actualRoute == route.name"
         >
-        <b-icon :icon="getIcons(route.name)" ></b-icon>
+        <shadcn-icon :icon="getIcons(route.name)" ></shadcn-icon>
        {{ route.name }}
-        </b-list-group-item
+        </shadcn-list-group-item
       >
-    </b-list-group>
+    </shadcn-list-group>
   <!-- <nav
     class="d-none bg-light sidebar"
     :class="showMenu ? 'd-md-block d-sm-block ' : ''"

@@ -13,16 +13,16 @@
   >
     <a class="navbar-brand col-sm-3 col-md-2 col-lg-2  mr-0" href="#"> OpenAS2 </a>
     <div class="p-2" @click="openSidemenu">
-      <b-icon icon="menu-button-wide" variant="white"></b-icon>
+      <shadcn-icon icon="menu-button-wide" variant="white"></shadcn-icon>
     </div>
     <ul class="navbar-nav px-3 ml-auto">
-      <b-nav-item-dropdown block right>
+      <shadcn-nav-item-dropdown block right>
         <template #button-content>
-          <b-avatar variant="primary" :text="abbreviationName" size="sm"></b-avatar>
+          <shadcn-avatar variant="primary" :text="abbreviationName" size="sm"></shadcn-avatar>
         <small class="ml-2 text-white">{{userName}}</small>
         </template>
-        <b-dropdown-item v-on:click="logout" href="#">Sign Out</b-dropdown-item>
-      </b-nav-item-dropdown>
+        <shadcn-dropdown-item v-on:click="logout" href="#">Sign Out</shadcn-dropdown-item>
+      </shadcn-nav-item-dropdown>
     </ul>
   </nav>
 </template>
