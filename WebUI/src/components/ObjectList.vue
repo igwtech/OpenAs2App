@@ -48,7 +48,7 @@ export default {
             
         }
     },
-    mounted: async function() {
+    async mounted() {
         console.log('Mounting');
         this.loading=true;
         try {

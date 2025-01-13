@@ -21,7 +21,7 @@
         <input type="checkbox" v-bind:checked="rememberme" value="remember-me"> Remember me
         </label>
     </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="login">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" @click.prevent="login">Sign in</button>
     <div  v-if="errored" v-html="errormsg" class="alert alert-primary" role="alert"></div>
     <p class="mt-5 mb-3 text-muted">© 2017-2019</p>
     </form>

@@ -1,6 +1,6 @@
 <template>
     <div id="editor">
-        <form @submit="submitForm">
+        <form @submit.prevent="submitForm">
             <h1 v-html="title"></h1>
             <div v-for="field in schema.fields" >
                 <template  v-if="field.type=='display'">

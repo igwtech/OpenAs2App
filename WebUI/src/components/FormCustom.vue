@@ -195,7 +195,7 @@ export default {
       data: {},
     };
   },
-  mounted: async function () {
+  async mounted() {
     this.data = this.model;
     // this.model.then((e) => {
     //   this.data = e;

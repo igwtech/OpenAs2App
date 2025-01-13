@@ -58,7 +58,7 @@ export default {
     };
   },
   methods: {
-    logout: function (e) {
+    logout(e) {
       store.dispatch("logoutAction", {});
       e.preventDefault();
     },

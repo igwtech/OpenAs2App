@@ -192,7 +192,7 @@ export default {
       return options;
     },
   },
-  mounted() {
+  async mounted() {
     this.totalRows = this.filteredItems.length;
   },
   methods: {

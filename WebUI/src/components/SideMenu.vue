@@ -52,7 +52,7 @@ export default {
     },
   },
   methods: {
-    getIcons(routeName){
+    getIcons(routeName) {
       let icon="house"
       switch (routeName) {
         case "Dashboard":

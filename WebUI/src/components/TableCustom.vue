@@ -160,7 +160,7 @@ export default {
       default: false,
     },
   },
-  mounted() {
+  async mounted() {
     this.totalRows = this.items.length;
   },
   methods: {

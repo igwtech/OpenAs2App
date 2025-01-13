@@ -1,6 +1,6 @@
 <template>
      <div id="editor">
-        <form @submit="submitForm">
+        <form @submit.prevent="submitForm">
             <h1 v-html="title"></h1>
                 <input type="hidden" v-model="data.data" name="data"  >
                 <div class="form-group" >

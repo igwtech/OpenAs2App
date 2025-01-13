@@ -97,7 +97,7 @@ export default {
       },
     };
   },
-  computed: {
+  setup() {
     chartData: function () {
       return {
         labels: this.labels ,

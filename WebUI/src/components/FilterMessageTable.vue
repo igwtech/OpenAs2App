@@ -118,7 +118,7 @@ export default {
     };
   },
   methods: {
-    filterItems:function(data){
+    filterItems(data) {
       this.$emit("filterItems",data)    }
   },
 };

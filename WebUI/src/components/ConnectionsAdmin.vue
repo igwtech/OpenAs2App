@@ -291,7 +291,7 @@ export default {
       return this.$route.name == "Connections";
     },
   },
-  mounted: async function () {
+  async mounted() {
     var list = await Utils.Crud.getList("partner");
     this.schema.fields[1].list = _.map(list, (item) => {
       return { value: item, text: item };

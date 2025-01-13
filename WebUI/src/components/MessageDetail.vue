@@ -204,7 +204,7 @@ export default {
       return this.$route.name == "Messages";
     },
   },
-  mounted: async function () {
+  async mounted() {
     var list = await Utils.Crud.getList("cert");
     this.schema.fields[3].list = _.map(list, (item) => {
       return { value: item, text: item };
