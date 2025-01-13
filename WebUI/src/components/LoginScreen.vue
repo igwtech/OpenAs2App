@@ -27,50 +27,59 @@
     </form>
 </div>
 </template>
-<script>
-import { mapState } from 'vuex';
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
 import store from '../store';
 import axios from 'axios';
 
-export default {
-    name: 'login-screen',
-    data: function() {return {
-        username: '',
-        password: '',
-        server: process.env.VUE_APP_RESTAPI_URL || 'http://127.0.0.1:8443/api',
-        rememberme: false,
-        loading: false,
-        errormsg: '',
-        errored: false
-    }},
-    methods: {
-        login: function(e) {
-            this.errormsg=null;
-            this.errored = false;
-            console.log(e);
-            var credentials = btoa(`${this.username}:${this.password}`);
-            var basicAuth = 'Basic ' + credentials;
-            this.loading = true;
-            axios
-            .get(this.server +  '/',{ headers: { 'Authorization': basicAuth }})
-            .then(response => {
-                console.log("Login Response" ,response.data);
-                if(response.data.type == 'OK') {
-                  store.dispatch('loginAction',{ user: this.username, pass: this.password , server: this.server });
-                }else{
-                  this.errormsg=response.data.result;
-                }
-            })
-            .catch(error => {
-                console.log(error)
-                this.errored = true;
-                this.errormsg = error;
-            })
-            .finally(() => this.loading = false)
-            
-        }
-    }
-}
+export default defineComponent({
+  name: 'login-screen',
+  setup() {
+    const username = ref('');
+    const password = ref('');
+    const server = ref(process.env.VUE_APP_RESTAPI_URL || 'http://127.0.0.1:8443/api');
+    const rememberme = ref(false);
+    const loading = ref(false);
+    const errormsg = ref('');
+    const errored = ref(false);
+
+    const login = (e: Event) => {
+      errormsg.value = null;
+      errored.value = false;
+      console.log(e);
+      const credentials = btoa(`${username.value}:${password.value}`);
+      const basicAuth = 'Basic ' + credentials;
+      loading.value = true;
+      axios
+        .get(server.value + '/', { headers: { 'Authorization': basicAuth } })
+        .then(response => {
+          console.log("Login Response", response.data);
+          if (response.data.type == 'OK') {
+            store.dispatch('loginAction', { user: username.value, pass: password.value, server: server.value });
+          } else {
+            errormsg.value = response.data.result;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          errored.value = true;
+          errormsg.value = error;
+        })
+        .finally(() => loading.value = false);
+    };
+
+    return {
+      username,
+      password,
+      server,
+      rememberme,
+      loading,
+      errormsg,
+      errored,
+      login
+    };
+  }
+});
 </script>
 <style>
 #loginscreen {
