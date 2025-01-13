@@ -12,11 +12,15 @@ const Utils = {
         }
         return list.join('&');
       },
+    getAuthHeaders: function() {
+        const credentials = btoa(`${store.state.username}:${store.state.password}`);
+        return { 'Authorization': 'Basic ' + credentials };
+    },
     Crud: {
         getList: async function(resource) {
             var url =store.state.server +  `/${resource}/list`;
             try {
-                var response= await axios.get(url,{ auth: { username: store.state.username, password: store.state.password }});
+                var response= await axios.get(url, { headers: Utils.getAuthHeaders() });
                 if(response.data.type === 'OK') {
                     return response.data.results;
                     
@@ -31,7 +35,7 @@ const Utils = {
         getListChart: async function(resource,range) {
             var url =store.state.server +  `/${resource}/data_charts?startDate=${range.startDate}&endDate=${range.endDate}`;
             try {
-                var response= await axios.get(url,{ auth: { username: store.state.username, password: store.state.password }});
+                var response= await axios.get(url, { headers: Utils.getAuthHeaders() });
                 if(response.data.type === 'OK') {
                     return response.data.results;
                     
@@ -53,7 +57,7 @@ const Utils = {
             var url=store.state.server +  `/${resource}/view/${item}`;
             console.log(url);
             try {
-                var response= await axios.get(url ,{  auth: { username: store.state.username, password: store.state.password } });
+                var response= await axios.get(url, { headers: Utils.getAuthHeaders() });
                 if(response.data.type == 'OK') {
                     var results=response.data.results[0];
                     results._id = index;
@@ -70,7 +74,7 @@ const Utils = {
             var url=store.state.server +  `/${resource}/filter/${empty.name}`;
             console.log(url);
             try {
-                var response= await axios.get(url ,{  auth: { username: store.state.username, password: store.state.password } });
+                var response= await axios.get(url, { headers: Utils.getAuthHeaders() });
                 if(response.data.type == 'OK') {
                     var results=response.data.results[0];
                     results._id = index;
@@ -105,7 +109,7 @@ const Utils = {
                 delete data._prefix;
                 form += Utils.URLEncode(data);
                 console.log('Posting Data', form);
-                var response = await axios.post(url,form,{  auth: { username: store.state.username, password: store.state.password } });
+                var response = await axios.post(url, form, { headers: Utils.getAuthHeaders() });
                 if(response.data.type === 'OK') {
                     return true;
                 }else{
@@ -127,7 +131,7 @@ const Utils = {
                 delete data._prefix;
                 form += Utils.URLEncode(data);
                 console.log('Posting Form', form);
-                var response = await axios.post(url,form,{  auth: { username: store.state.username, password: store.state.password } });
+                var response = await axios.post(url, form, { headers: Utils.getAuthHeaders() });
                 if(response.data.type === 'OK') {
                     return true;
                 }else{
@@ -144,7 +148,7 @@ const Utils = {
             var item =list[index];
             var url=store.state.server +  `/${resource}/delete/${item}`;
             try {
-                var response = await axios.get(url,{  auth: { username: store.state.username, password: store.state.password } });
+                var response = await axios.get(url, { headers: Utils.getAuthHeaders() });
                 if(response.data.type === 'OK') {
                     //var results=response.data.result;
                     return true;
