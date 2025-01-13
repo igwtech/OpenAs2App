@@ -1,11 +1,6 @@
 import { createStore } from 'vuex';
 import dashboardModule from './modules/dashboard.module.js';
 
-interface RootState {
-    username: string | null;
-    password: string | null;
-    server: string | null;
-}
 
 const store = createStore<RootState>({
   modules: {
