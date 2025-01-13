@@ -48,134 +48,130 @@
     </b-modal>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, ref, computed, onMounted } from 'vue';
 import FormCustom from "./FormCustom";
 import TableCustom from "./TableCustom";
 import Utils from "../utils";
 import Swal from "sweetalert2";
-var _ = require("lodash");
-export default {
-  data: function () {
-    return {
-      breadcrumbs: [
-        {
-          text: "Dashboard",
-          to: { name: "Dashboard" },
-          active: false,
-        },
-        {
-          text: "Partners",
-          to: { name: "Partners" },
-          active: true,
-        },
-      ],
-      schema: {
-        fields: [
-          {
-            type: "text",
-            name: "name",
-            label: "Partner ID",
-            placeholder: "Trading Partner's Unique Key Name",
-            _validate: {
-              required: true,
-            },
-          },
-          {
-            type: "text",
-            name: "as2_id",
-            label: "AS2 ID",
-            placeholder: "Trading Partner's AS2 ID",
-            _validate: {
-              required: true,
-            },
-          },
-          {
-            type: "email",
-            name: "email",
-            label: "Email",
-            placeholder: "Trading Partner's Email Address",
-            _validate: {
-              required: true,
-              email: true,
-            },
-          },
-          {
-            type: "select",
-            name: "x509_alias",
-            label: "Certificate Alias",
-            // placeholder: "X.509 Certificate Alias on the KeyStore",
-            _validate: {
-              required: true,
-            },
-            list: [],
-          },
-        ],
-      },
-      fields: [
-        {
-          key: "key",
-          label: "#",
-          sortable: true,
-          class: "text-center",
-        },
-        {
-          key: "name",
-          label: "Partner ID",
-          sortable: true,
-          class: "text-center",
-        },
-        { key: "actions", label: "Actions", class: "text-center" },
-      ],
-      infoModal: {
-        id: "info-modal",
-        title: "",
-      },
-      items: [],
-      item: {
-        _id: null,
-        name: "",
-        as2_id: "",
-        email: "",
-        x509_alias: "",
-      },
-      loadingTable: false,
-      loadingForm: false,
-    };
-  },
+import _ from "lodash";
+
+export default defineComponent({
+  name: "PartnersAdmin",
   components: {
     FormCustom,
     TableCustom,
   },
-  computed: {
-    isPathPartnerList() {
-      return this.$route.name == "Partners";
-    },
-  },
-  async mounted() {
-    var list = await Utils.Crud.getList("cert");
-    this.schema.fields[3].list = _.map(list, (item) => {
-      return { value: item, text: item };
+  setup() {
+    const breadcrumbs = ref([
+      {
+        text: "Dashboard",
+        to: { name: "Dashboard" },
+        active: false,
+      },
+      {
+        text: "Partners",
+        to: { name: "Partners" },
+        active: true,
+      },
+    ]);
+
+    const schema = ref({
+      fields: [
+        {
+          type: "text",
+          name: "name",
+          label: "Partner ID",
+          placeholder: "Trading Partner's Unique Key Name",
+          _validate: {
+            required: true,
+          },
+        },
+        {
+          type: "text",
+          name: "as2_id",
+          label: "AS2 ID",
+          placeholder: "Trading Partner's AS2 ID",
+          _validate: {
+            required: true,
+          },
+        },
+        {
+          type: "email",
+          name: "email",
+          label: "Email",
+          placeholder: "Trading Partner's Email Address",
+          _validate: {
+            required: true,
+            email: true,
+          },
+        },
+        {
+          type: "select",
+          name: "x509_alias",
+          label: "Certificate Alias",
+          _validate: {
+            required: true,
+          },
+          list: [] as any[],
+        },
+      ],
     });
-    await this.getList();
-  },
-  methods: {
-    resetModal: function () {
-      this.infoModal.title = "";
-      this.item = {
+
+    const fields = ref([
+      {
+        key: "key",
+        label: "#",
+        sortable: true,
+        class: "text-center",
+      },
+      {
+        key: "name",
+        label: "Partner ID",
+        sortable: true,
+        class: "text-center",
+      },
+      { key: "actions", label: "Actions", class: "text-center" },
+    ]);
+
+    const infoModal = ref({
+      id: "info-modal",
+      title: "",
+    });
+
+    const items = ref<any[]>([]);
+    const item = ref({
+      _id: null,
+      name: "",
+      as2_id: "",
+      email: "",
+      x509_alias: "",
+    });
+
+    const loadingTable = ref(false);
+    const loadingForm = ref(false);
+
+    const isPathPartnerList = computed(() => {
+      return this.$route.name == "Partners";
+    });
+
+    const resetModal = () => {
+      infoModal.value.title = "";
+      item.value = {
         _id: null,
         name: "",
         as2_id: "",
         email: "",
         x509_alias: "",
       };
-      this.$root.$emit("bv::hide::modal", this.infoModal.id);
-      this.loadingTable=false;
-      this.loadingForm=false;
+      this.$root.$emit("bv::hide::modal", infoModal.value.id);
+      loadingTable.value = false;
+      loadingForm.value = false;
+    };
 
-    },
-    deleteObject: async function (item) {
+    const deleteObject = async (item: any) => {
       try {
-        this.loadingTable = true;
+        loadingTable.value = true;
         Swal.fire({
           title: "Are you sure to delete?",
           html: `a partner  ${item.name}`,
@@ -186,54 +182,57 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             Utils.Crud.deleteObject("partner", item.key)
-              .then((response) => {
+              .then(() => {
                 Swal.fire("Deleted!", "", "success");
-                this.loadingTable = false;
-                this.getList();
+                loadingTable.value = false;
+                getList();
               })
               .catch((e) => {
                 console.log("delete parner", e);
                 Swal.fire("Error!", e, "error");
-                this.loadingTable = false;
+                loadingTable.value = false;
               });
           } else {
-            this.loadingTable = false;
+            loadingTable.value = false;
           }
         });
       } catch (e) {
         console.log(e);
         Swal.fire("Error!", e, "error");
-        this.loadingTable = false;
+        loadingTable.value = false;
       }
-    },
-    newObject: function () {
-      this.loadingTable=true;
-      this.infoModal.title = "New partner";
-      this.item = {
+    };
+
+    const newObject = () => {
+      loadingTable.value = true;
+      infoModal.value.title = "New partner";
+      item.value = {
         _id: null,
         name: "",
         as2_id: "",
         email: "",
         x509_alias: "",
       };
-      this.$root.$emit("bv::show::modal", this.infoModal.id);
-    },
-    editObject: async function (_item) {
-      this.loadingTable = true;
-      this.infoModal.title = "Edit partner";
-      var newObj = this.getNewObject();
+      this.$root.$emit("bv::show::modal", infoModal.value.id);
+    };
+
+    const editObject = async (_item: any) => {
+      loadingTable.value = true;
+      infoModal.value.title = "Edit partner";
+      const newObj = getNewObject();
       const result = await Utils.Crud.getObject("partner", _item.key, newObj);
-      console.log("resutl", result);
-      this.item = Object.assign(this.item, result);
-      this.$root.$emit("bv::show::modal", this.infoModal.id);
-    },
-    getNewObject: function () {
-      var obj = { _id: null };
-      this.schema.fields.forEach((f) => (obj[f.name] = f.value));
+      item.value = Object.assign(item.value, result);
+      this.$root.$emit("bv::show::modal", infoModal.value.id);
+    };
+
+    const getNewObject = () => {
+      const obj: any = { _id: null };
+      schema.value.fields.forEach((f) => (obj[f.name] = f.value));
       return obj;
-    },
-    getList: async function () {
-      this.items = await Utils.Crud.getList("partner").then((results) => {
+    };
+
+    const getList = async () => {
+      items.value = await Utils.Crud.getList("partner").then((results) => {
         return _.map(results, (item, index) => {
           return {
             key: index,
@@ -245,23 +244,51 @@ export default {
           };
         });
       });
-    },
-    saveObject: async function (data) {
-      this.loadingForm = true;
+    };
+
+    const saveObject = async (data: any) => {
+      loadingForm.value = true;
       try {
         await Utils.Crud.saveObject("partner", data).then(() => {
-          this.loadingForm = false;
-          this.loadingTable = false;
+          loadingForm.value = false;
+          loadingTable.value = false;
         });
-        this.resetModal();
-        await this.getList();
+        resetModal();
+        await getList();
       } catch (e) {
         Swal.fire("Error!", e, "error");
-        this.loadingForm = false;
+        loadingForm.value = false;
       }
-    },
+    };
+
+    onMounted(async () => {
+      const list = await Utils.Crud.getList("cert");
+      schema.value.fields[3].list = _.map(list, (item) => {
+        return { value: item, text: item };
+      });
+      await getList();
+    });
+
+    return {
+      breadcrumbs,
+      schema,
+      fields,
+      infoModal,
+      items,
+      item,
+      loadingTable,
+      loadingForm,
+      isPathPartnerList,
+      resetModal,
+      deleteObject,
+      newObject,
+      editObject,
+      getNewObject,
+      getList,
+      saveObject,
+    };
   },
-};
+});
 </script>
 <style >
 </style>
