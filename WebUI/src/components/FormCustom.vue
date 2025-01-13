@@ -170,70 +170,70 @@
     </b-row>
   </b-form>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, ref, computed, PropType } from 'vue';
+
+export default defineComponent({
   props: {
     schema: {
-      type: Object,
-      require: true,
+      type: Object as PropType<{ fields: any[] }>,
+      required: true,
     },
     model: {
-      type: Object,
+      type: Object as PropType<Record<string, any>>,
       required: true,
     },
     title: {
       type: String,
       required: false,
     },
-    loading:{
-      type:Boolean,
-      default:false
-    }
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      data: {},
-    };
-  },
-  async mounted() {
-    this.data = this.model;
-    // this.model.then((e) => {
-    //   this.data = e;
-    // });
-  },
-  methods: {
-    validateState: function (ref) {
+  setup(props, { emit }) {
+    const data = ref({ ...props.model });
+
+    const validateState = (ref: string) => {
       if (
-        this.veeFields[ref] &&
-        (this.veeFields[ref].dirty || this.veeFields[ref].validated)
+        (props as any).veeFields[ref] &&
+        ((props as any).veeFields[ref].dirty || (props as any).veeFields[ref].validated)
       ) {
-        return !this.veeErrors.has(ref);
+        return !(props as any).veeErrors.has(ref);
       }
       return null;
-    },
-    submitForm: function (e) {
+    };
+
+    const submitForm = (e: Event) => {
       e.preventDefault();
-      this.$validator.validateAll().then((result) => {
+      (props as any).$validator.validateAll().then((result: boolean) => {
         if (!result) {
           return;
         }
-        this.$emit("commit", this.data);
+        emit("commit", data.value);
       });
-    },
-    cancelForm: function (e) {
-      this.$emit("revert", this.data._id);
-    },
-    fileUpload: function (e) {
-      var oFile = document.getElementById(e.target.name).files[0];
-      console.log("e",e.target.name)
-      console.log("onfile",oFile);
-      if(oFile.size > 0){
-        console.log("onfile");
-        this.$emit("fileUpload",{file:oFile,e})
-      }
-      // console.log("eeeee",e);
+    };
 
-    },
+    const cancelForm = (e: Event) => {
+      emit("revert", data.value._id);
+    };
+
+    const fileUpload = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const oFile = target.files ? target.files[0] : null;
+      if (oFile && oFile.size > 0) {
+        emit("fileUpload", { file: oFile, e });
+      }
+    };
+
+    return {
+      data,
+      validateState,
+      submitForm,
+      cancelForm,
+      fileUpload,
+    };
   },
-};
+});
 </script>
