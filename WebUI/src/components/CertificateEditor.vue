@@ -39,109 +39,122 @@
         </form>
      </div>
 </template>
-<script>
-export default {
-    data:function() {
-        return  {
-            serial:0,
-            validNotBefore: null,
-            validNotAfter: null,
-            fingerPrint: '',
-            subject: '',
-            issuerName: '',
-            data: {alias:null, data:null}
-        };
-    },
-     props: {
-        model: {
-            type: Promise,
-            required: true
-        },
-        schema: {
-            type: Object,
-            required: true
-        },
-        title: {
-            type: String,
-            required: false
-        }
-    },
-    watch: {
-        data: function(e) {
-            console.log('DATA CHANGED!',e);
-            this.changedCert();
-        }
-    },
-    mounted: function() {
-        console.log(this.model);
-        this.model.then((e)=>this.data=e);
-    },
-    methods: {
-        submitForm: function(e) {
-            console.log('submitForm',e);
-            e.preventDefault();
-            this.$emit('commit',this.data);
-        },
-        deleteForm: function(e) {
-            console.log('submitForm',e);
-            e.preventDefault();
-            this.$emit('delete',this.data._id);
-        },
-        cancelForm: function(e) {
-            this.$emit('revert',this.data._id);
-        },
-        fileUpload: function(e) {
-          var oFile = document.getElementById('upload').files[0];
-          console.log(oFile,e);
-          // filter for image files
-          var rFilter = /^(application\/x-x509-ca-cert|application\/x-pkcs12)$/i;
-          if (! rFilter.test(oFile.type)) {
-              alert('Error invalid file-type')
-              return;
-          }
-          if (oFile.size == 0) {
-              alert('Error unable to read file, empty?');
-              return;
-          } 
-          var oReader = new FileReader();
-          var that=this;
-          oReader.onload = function(e){
-            console.log(e.target.result);
-            var PEM = e.target.result;
-            PEM=PEM.replace('-----BEGIN CERTIFICATE-----','').replace('-----END CERTIFICATE-----','');
-            PEM=PEM.replace(/[^A-Za-z0-9+/=]+/gm,'');
-            that.data.data = PEM;
-            that.changedCert();
-          }
-          oReader.readAsText(oFile);
+<script lang="ts">
+import { defineComponent, ref, watch, PropType } from 'vue';
 
-        },
-        changedCert: function() {
-            var cert = new X509();
-            var PEM = this.data.data;
-            if(this.data.data == null) {
-                this.serial = '';
-                this.issuerName='';
-                this.validNotBefore = null;
-                this.validNotAfter = null;
-                this.subject = '';
-                this.fingerPrint = '';
-            return;
-            }
-            if(PEM.substr(0,4) !== '----'){
-                PEM = '-----BEGIN CERTIFICATE-----\n' + PEM + '\n-----END CERTIFICATE-----';
-            }
-            cert.readCertPEM(PEM);
-            this.serial = cert.getSerialNumberHex();
-            this.issuerName=cert.getIssuerString();
-            this.validNotBefore = zulutodate(cert.getNotBefore());
-            this.validNotAfter = zulutodate(cert.getNotAfter());
-            this.subject = cert.getSubjectString();
-            this.fingerPrint = KJUR.crypto.Util.hashHex(cert.hex, 'sha1');
-            console.log(cert);
-        }
-    }
-}
+export default defineComponent({
+  props: {
+    model: {
+      type: Object as PropType<Promise<Record<string, any>>>,
+      required: true,
+    },
+    schema: {
+      type: Object as PropType<{ fields: any[] }>,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: false,
+    },
+  },
+  setup(props, { emit }) {
+    const serial = ref<string | number>(0);
+    const validNotBefore = ref<string | null>(null);
+    const validNotAfter = ref<string | null>(null);
+    const fingerPrint = ref<string>('');
+    const subject = ref<string>('');
+    const issuerName = ref<string>('');
+    const data = ref<{ alias: string | null; data: string | null }>({ alias: null, data: null });
+
+    props.model.then((e) => (data.value = e));
+
+    watch(data, (e) => {
+      console.log('DATA CHANGED!', e);
+      changedCert();
+    });
+
+    const submitForm = (e: Event) => {
+      console.log('submitForm', e);
+      e.preventDefault();
+      emit('commit', data.value);
+    };
+
+    const deleteForm = (e: Event) => {
+      console.log('submitForm', e);
+      e.preventDefault();
+      emit('delete', data.value?._id);
+    };
+
+    const cancelForm = (e: Event) => {
+      emit('revert', data.value?._id);
+    };
+
+    const fileUpload = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const oFile = target.files ? target.files[0] : null;
+      console.log(oFile, e);
+      const rFilter = /^(application\/x-x509-ca-cert|application\/x-pkcs12)$/i;
+      if (!oFile || !rFilter.test(oFile.type)) {
+        alert('Error invalid file-type');
+        return;
+      }
+      if (oFile.size == 0) {
+        alert('Error unable to read file, empty?');
+        return;
+      }
+      const oReader = new FileReader();
+      oReader.onload = function (e) {
+        console.log(e.target?.result);
+        let PEM = e.target?.result as string;
+        PEM = PEM.replace('-----BEGIN CERTIFICATE-----', '').replace('-----END CERTIFICATE-----', '');
+        PEM = PEM.replace(/[^A-Za-z0-9+/=]+/gm, '');
+        data.value.data = PEM;
+        changedCert();
+      };
+      oReader.readAsText(oFile);
+    };
+
+    const changedCert = () => {
+      const cert = new X509();
+      let PEM = data.value.data;
+      if (data.value.data == null) {
+        serial.value = '';
+        issuerName.value = '';
+        validNotBefore.value = null;
+        validNotAfter.value = null;
+        subject.value = '';
+        fingerPrint.value = '';
+        return;
+      }
+      if (PEM.substr(0, 4) !== '----') {
+        PEM = '-----BEGIN CERTIFICATE-----\n' + PEM + '\n-----END CERTIFICATE-----';
+      }
+      cert.readCertPEM(PEM);
+      serial.value = cert.getSerialNumberHex();
+      issuerName.value = cert.getIssuerString();
+      validNotBefore.value = zulutodate(cert.getNotBefore());
+      validNotAfter.value = zulutodate(cert.getNotAfter());
+      subject.value = cert.getSubjectString();
+      fingerPrint.value = KJUR.crypto.Util.hashHex(cert.hex, 'sha1');
+      console.log(cert);
+    };
+
+    return {
+      serial,
+      validNotBefore,
+      validNotAfter,
+      fingerPrint,
+      subject,
+      issuerName,
+      data,
+      submitForm,
+      deleteForm,
+      cancelForm,
+      fileUpload,
+      changedCert,
+    };
+  },
+});
 </script>
 <style scoped>
 
