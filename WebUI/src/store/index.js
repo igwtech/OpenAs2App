@@ -1,5 +1,4 @@
-import { createStore, Store } from 'vuex';
-import { Module } from 'vuex';
+import { createStore } from 'vuex';
 import dashboardModule from './modules/dashboard.module.js';
 
 interface RootState {
@@ -8,43 +7,7 @@ interface RootState {
     server: string | null;
 }
 
-const dashboardModule: Module<any, RootState> = {
-    namespaced: true,
-    state: {
-        tableData: null
-    },
-    getters: {},
-    actions: {
-        async fetchTableDataByDate({ commit }, payload) {
-            try {
-                const resp = await Dashboard.getTableDataByDate(payload);
-                commit('set_data', resp.data.results);
-                return true;
-            } catch (error) {
-                console.log(error);
-                return error;
-            }
-        },
-        async fetchTableDataByInterval({ commit }, payload) {
-            try {
-                const resp = await Dashboard.getTableDataByInterval(payload);
-                commit('set_data', resp.data.results);
-                return true;
-            } catch (error) {
-                console.log(error);
-                return error;
-            }
-        }
-    },
-    mutations: {
-        set_data: (state, data) => {
-            state.tableData = null;
-            state.tableData = data;
-        }
-    }
-};
-
-const store: Store<RootState> = createStore({
+const store = createStore<RootState>({
   modules: {
     dashboardModule
   },
@@ -55,11 +18,11 @@ const store: Store<RootState> = createStore({
   },
   actions: {
     loginAction(context, payload) {
-      if (this.debug) console.log(`Logging with ${payload.user} and ${payload.pass}`);
+      console.log(`Logging with ${payload.user} and ${payload.pass}`);
       context.commit('login', payload);
     },
     logoutAction(context) {
-      if (this.debug) console.log(`Logout`);
+      console.log(`Logout`);
       context.commit('logout');
     }
   },
