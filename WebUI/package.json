@@ -34,7 +34,11 @@
     "xlsx": "^0.18.5",
     "yarn": "^1.22.17"
   },
+  "dependencies": {
+    "typescript": "^5.0.0"
+  },
   "devDependencies": {
+    "@vue/cli-plugin-typescript": "^5.0.8",
     "@babel/eslint-parser": "^7.25.9",
     "@vue/cli-plugin-babel": "^5.0.8",
     "@vue/cli-plugin-eslint": "^5.0.8",
