@@ -12,10 +12,10 @@
   />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, computed } from 'vue';
 import 'chart.js/auto';
 import { Line as LineChartGenerator } from "vue-chartjs";
-import moment from "moment";
 import {
   Chart as ChartJS,
   Title,
@@ -37,7 +37,7 @@ ChartJS.register(
   PointElement
 );
 
-export default {
+export default defineComponent({
   name: "LineChart",
   components: {
     LineChartGenerator,
@@ -65,71 +65,37 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     plugins: {
       type: Array,
       default: () => [],
     },
     labels: {
-      type: Array,
+      type: Array as () => string[],
+      required: true,
     },
-    datasets:{
-      type:Array
-    }
+    datasets: {
+      type: Array as () => any[],
+      required: true,
+    },
   },
-  data() {
+  setup(props) {
+    const chartOptions = computed(() => ({
+      responsive: true,
+      maintainAspectRatio: false,
+    }));
+
+    const chartData = computed(() => ({
+      labels: props.labels,
+      datasets: props.datasets,
+    }));
+
     return {
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
+      chartOptions,
+      chartData,
     };
   },
-  setup() {
-    return {
-      chartData: {
-        labels: this.labels,
-        datasets: this.datasets,
-      },
-      getRandomArbitrary() {
-        let numbers = [];
-        let min = 1;
-        let max = 100;
-        for (let index = 0; index < 30; index++) {
-          numbers.push(Math.round(Math.random() * (max - min) + min));
-        }
-        return numbers;
-      },
-      getRandomArbitrary2() {
-        let numbers = [];
-        let min = 1;
-        let max = 100;
-        for (let index = 0; index < 30; index++) {
-          numbers.push(Math.round(Math.random() * (max - min) + min));
-        }
-        return numbers;
-      },
-      getRandomArbitrary3() {
-        let numbers = [];
-        let min = 1;
-        let max = 100;
-        for (let index = 0; index < 30; index++) {
-          numbers.push(Math.round(Math.random() * (max - min) + min));
-        }
-        console.log("numbers", numbers);
-        return numbers;
-      },
-      categories() {
-        let dates = [];
-        let monthly = Math.random() * (12 - 1) + 1;
-        for (let index = 1; index < 31; index++) {
-          dates.push(moment(`2022/04/${index}`).format("YYYY/MM/DD"));
-        }
-        return dates;
-      },
-    };
-  },
-};
+});
 </script>
 

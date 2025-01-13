@@ -15,7 +15,8 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, computed } from 'vue';
 import 'chart.js/auto';
 import { Bar } from "vue-chartjs";
 
@@ -38,7 +39,7 @@ ChartJS.register(
   LinearScale
 );
 
-export default {
+export default defineComponent({
   name: "BarChart",
   components: {
     Bar,
@@ -66,45 +67,44 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     plugins: {
       type: Array,
       default: () => [],
     },
-    color:{
-      type:String,
-      default:"#f87979"
+    color: {
+      type: String,
+      default: "#f87979",
     },
-    labels:{
-      type:Array
+    labels: {
+      type: Array as () => string[],
+      required: true,
     },
-    data:{
-      type:Array
+    datasets: {
+      type: Array as () => any[],
+      required: true,
     },
-    title:{
-      type:String,
-      default:"title "
+    title: {
+      type: String,
+      default: "title ",
     },
-    datasets:{
-      type:Array
-    }
   },
-  data() {
+  setup(props) {
+    const chartOptions = computed(() => ({
+      responsive: true,
+      maintainAspectRatio: false,
+    }));
+
+    const chartData = computed(() => ({
+      labels: props.labels,
+      datasets: props.datasets,
+    }));
+
     return {
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
+      chartOptions,
+      chartData,
     };
   },
-  setup() {
-    return {
-      chartData: {
-        labels: this.labels,
-        datasets: this.datasets
-      }
-    };
-  },
-};
+});
 </script>
