@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from './components/Dashboard'
 import CertificatesAdmin from './components/CertificatesAdmin'
 import PartnersAdmin from './components/PartnersAdmin'
@@ -7,7 +6,6 @@ import ConnectionsAdmin from './components/ConnectionsAdmin'
 import MessagesAdmin from './components/MessagesAdmin'
 import MessageDetail from './components/MessageDetail'
 
-Vue.use(VueRouter);
 const routes = [
     { path: '/', component: Dashboard, name: "Dashboard", meta: { sidemenu: true } },
     { path: '/partners', component: PartnersAdmin, name: "Partners" , meta: { sidemenu: true }},
@@ -19,7 +17,8 @@ const routes = [
     { path: '/messages', component: MessagesAdmin, name: "Messages" , meta: { sidemenu: true }},
     { path: '/message/:id', component: MessageDetail, name: "MessageDetail" , meta: { sidemenu: false }},
 ];
-const router = new VueRouter({
-  routes // short for `routes: routes`
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
 });
 export default router;
