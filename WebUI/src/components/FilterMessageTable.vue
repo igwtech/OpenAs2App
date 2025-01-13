@@ -75,51 +75,49 @@
     </b-row>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, ref, PropType } from 'vue';
+
+export default defineComponent({
   props: {
     filter: {
-      type: Object,
-      default: ()=>{ return  {text:"",location : "",local:"", states: [],dateTime:"local" }},
+      type: Object as PropType<{ text: string; location: string; local: string; states: string[]; dateTime: string }>,
+      default: () => ({ text: "", location: "", local: "", states: [], dateTime: "local" }),
     },
-    filterField:{
-      type:Object
-    }
+    filterField: {
+      type: Object as PropType<{ locations: any[]; states: any[]; dateTimes: any[] }>,
+      required: true,
+    },
   },
-  data() {
+  setup(props, { emit }) {
+    const list = ref([
+      { value: "", text: "All" },
+      { value: "MyCompany", text: "MyCompany" },
+      { value: "PartnerB", text: "PartnerB" },
+      { value: "PartnerA", text: "PartnerA" },
+    ]);
+
+    const listDisplay = ref([
+      { text: "Display ok", value: "ok", badge: "success", ab: "O" },
+      { text: "Display pending", value: "pending", badge: "warning", ab: "P" },
+      { text: "Display stop", value: "stop", badge: "danger", ab: "S" },
+    ]);
+
+    const listDateTime = ref([
+      { text: "Local[America/Caracas; -04:00]", value: "local" },
+      { text: "AS2 Server[Europe/Berlin; +02:00]", value: "server" },
+    ]);
+
+    const filterItems = (data: string) => {
+      emit("filterItems", data);
+    };
+
     return {
-      list: [
-        {
-          value: "",
-          text: "All",
-        },
-        {
-          value:"MyCompany",
-          text:"MyCompany"
-        },
-        {
-          value:"PartnerB",
-          text:"PartnerB"
-        },
-        {
-          value:"PartnerA",
-          text:"PartnerA"
-        },
-      ],
-      listDisplay: [
-        { text: "Display ok", value: "ok",badge:"success",ab:"O" },
-        { text: "Display pending", value: "pending", badge:"warning" ,ab:"P" },
-        { text: "Display stop", value: "stop", badge:"danger", ab:"S" },
-      ],
-      listDateTime: [
-        { text: "Local[America/Caracas; -04:00]", value: "local" },
-        { text: "AS2 Server[Europe/Berlin; +02:00]", value: "server" },
-      ],
+      list,
+      listDisplay,
+      listDateTime,
+      filterItems,
     };
   },
-  methods: {
-    filterItems(data) {
-      this.$emit("filterItems",data)    }
-  },
-};
+});
 </script>
