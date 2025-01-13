@@ -99,29 +99,12 @@ export default {
     };
   },
   setup() {
-    chartData: function () {
-      return {
-        labels: this.labels ,
+    return {
+      chartData: {
+        labels: this.labels,
         datasets: this.datasets
-        // [
-        //   {
-        //     label:this.title,
-        //     backgroundColor: this.color,
-        //     data: this.data,
-        //   },
-        //   {
-        //     label:this.title,
-        //     backgroundColor: this.color,
-        //     data: this.data,
-        //   },
-        //   {
-        //     label:this.title,
-        //     backgroundColor: this.color,
-        //     data: this.data,
-        //   },
-        // ],
-      };
-    },
+      }
+    };
   },
 };
 </script>
