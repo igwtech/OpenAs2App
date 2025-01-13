@@ -6,7 +6,7 @@ import ConnectionsAdmin from './components/ConnectionsAdmin.vue';
 import MessagesAdmin from './components/MessagesAdmin.vue';
 import MessageDetail from './components/MessageDetail.vue';
 
-const routes: Array<RouteRecordRaw> = [
+const routes = [
     { path: '/', component: Dashboard, name: "Dashboard", meta: { sidemenu: true } },
     { path: '/partners', component: PartnersAdmin, name: "Partners", meta: { sidemenu: true }},
     { path: '/partner/:id', component: PartnersAdmin, name: "PartnerEditor", meta: { sidemenu: false } },
