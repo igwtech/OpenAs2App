@@ -26,43 +26,52 @@
     </ul>
   </nav>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, ref, computed } from 'vue';
 import store from "../store";
 import router from "../routes";
 
-export default {
+export default defineComponent({
   name: "top-menu",
-  data: function () {
-    //console.log(router.options.routes);
-    return {
-      routes: router.options.routes.filter((e) =>
-        e.meta != null ? e.meta.sidemenu : false
-      ),
-    };
-  },
-  methods: {
-    logout(e) {
-      store.dispatch("logoutAction", {});
-      e.preventDefault();
-    },
-  },
   props: {
     openSidemenu: {
-      require: false,
+      type: Function as PropType<() => void>,
+      required: false,
     },
   },
-  computed: {
-    actualRoute() {
-      return this.$router.name;
-    },
-    userName(){
+  setup(props) {
+    const routes = ref(
+      router.options.routes.filter((e) =>
+        e.meta != null ? e.meta.sidemenu : false
+      )
+    );
+
+    const actualRoute = computed(() => {
+      return router.currentRoute.value.name;
+    });
+
+    const userName = computed(() => {
       return store.state.username;
-    },
-    abbreviationName(){
+    });
+
+    const abbreviationName = computed(() => {
       return store.state.username.substr(0, 2).toUpperCase();
-    }
+    });
+
+    const logout = (e: Event) => {
+      store.dispatch("logoutAction", {});
+      e.preventDefault();
+    };
+
+    return {
+      routes,
+      actualRoute,
+      userName,
+      abbreviationName,
+      logout,
+    };
   },
-};
+});
 </script>
 <style>
 /*
