@@ -9,7 +9,6 @@
           :label="field.label"
           :label-for="field.name"
         >
-          <!-- :value-field="field.value ? field.value : 'hh'" -->
           <shadcn-form-select
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
@@ -25,7 +24,7 @@
           ></shadcn-form-select>
           <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
-          }}</b-form-invalid-feedback>
+          }}</shadcn-form-invalid-feedback>
         </shadcn-form-group>
       </template>
       <template v-else-if="field.type === 'textarea'">
@@ -36,7 +35,6 @@
           :label="field.label"
           :label-for="field.name"
         >
-          <!-- :value-field="field.value ? field.value : 'hh'" -->
           <shadcn-form-textarea
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
@@ -53,7 +51,7 @@
           ></shadcn-form-textarea>
           <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
-          }}</b-form-invalid-feedback>
+          }}</shadcn-form-invalid-feedback>
         </shadcn-form-group>
       </template>
       <template v-else-if="field.type === 'datepicker'">
@@ -78,7 +76,7 @@
           ></shadcn-form-datepicker>
           <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
-          }}</b-form-invalid-feedback>
+          }}</shadcn-form-invalid-feedback>
         </shadcn-form-group>
       </template>
       <template v-else-if="field.type === 'file'">
@@ -105,7 +103,7 @@
           ></shadcn-form-file>
           <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
-          }}</b-form-invalid-feedback>
+          }}</shadcn-form-invalid-feedback>
         </shadcn-form-group>
       </template>
       <template v-else-if="field.type === 'checkbox'">
@@ -115,7 +113,6 @@
           :id="`type-${field.name}`"
           :label-for="field.name"
         >
-          <!-- :label="field.label" -->
           <shadcn-form-checkbox
             :disabled="field.disabled?field.disabled:false"
             :id="field.name"
@@ -131,7 +128,7 @@
           >
           <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
-          }}</b-form-invalid-feedback>
+          }}</shadcn-form-invalid-feedback>
         </shadcn-form-group>
       </template>
       <template v-else>
@@ -156,7 +153,7 @@
           ></shadcn-form-input>
           <shadcn-form-invalid-feedback :id="`${field.name}-feedback`">{{
             veeErrors.first(field.name)
-          }}</b-form-invalid-feedback>
+          }}</shadcn-form-invalid-feedback>
         </shadcn-form-group>
       </template>
     </template>
