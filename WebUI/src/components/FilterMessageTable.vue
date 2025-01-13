@@ -12,22 +12,22 @@
           ></shadcn-form-select>
         </shadcn-form-group>
       </shadcn-col>
-      <!-- <b-col sm="6" md="2" lg="2">
-        <b-form-group
+      <!-- <shadcn-col sm="6" md="2" lg="2">
+        <shadcn-form-group
           id="location"
           label="Remote station"
           label-for="`location`"
         >
-          <b-form-select
+          <shadcn-form-select
             @change="filterItems('location')"
             id="location"
             name="location"
             v-model="filter.location"
             placeholder=""
             :options="filterField.locations[1].list"
-          ></b-form-select>
-        </b-form-group>
-      </b-col> -->
+          ></shadcn-form-select>
+        </shadcn-form-group>
+      </shadcn-col> -->
 
       <shadcn-col sm="6" md="3" lg="3">
         <shadcn-form-group v-slot="{ ariaDescribedby }">
@@ -65,13 +65,13 @@
           >
         </shadcn-form-group>
       </shadcn-col>
-      <!-- <b-col sm="1" md="1" lg="1">
-          <b-button variant="primary">
-              <b-icon icon="arrow-repeat"></b-icon>
+      <!-- <shadcn-col sm="1" md="1" lg="1">
+          <shadcn-button variant="primary">
+              <shadcn-icon icon="arrow-repeat"></shadcn-icon>
               Refresh
-              </b-button>
-      </b-col> -->
-    </b-row>
+              </shadcn-button>
+      </shadcn-col> -->
+    </shadcn-row>
   </div>
 </template>
 <script lang="ts">

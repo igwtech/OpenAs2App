@@ -1,11 +1,11 @@
 
 <template>
   <div>
-    <b-row>
+    <shadcn-row>
       <template>
         <!-- <pre>{{items}}</pre> -->
-        <!-- <b-col sm="12" lg="12" md="12" class="my-3">
-          <b-form-group
+        <!-- <shadcn-col sm="12" lg="12" md="12" class="my-3">
+          <shadcn-form-group
             label="Filter"
             label-for="filter-input"
             label-cols-sm="1"
@@ -13,24 +13,24 @@
             label-size="sm"
             class="mb-0"
           >
-            <b-input-group size="sm">
-              <b-form-input
+            <shadcn-input-group size="sm">
+              <shadcn-form-input
                 id="filter-input"
                 v-model="filter.text"
                 type="search"
                 placeholder="Type to Search"
-              ></b-form-input>
+              ></shadcn-form-input>
 
-              <b-input-group-append>
-                <b-button :disabled="!filter.text" @click="filter.text = ''"
-                  >Clear</b-button
+              <shadcn-input-group-append>
+                <shadcn-button :disabled="!filter.text" @click="filter.text = ''"
+                  >Clear</shadcn-button
                 >
-              </b-input-group-append>
-            </b-input-group>
-          </b-form-group>
-        </b-col> -->
-        <b-col sm="12" md="4" class="my-1">
-          <b-form-group
+              </shadcn-input-group-append>
+            </shadcn-input-group>
+          </shadcn-form-group>
+        </shadcn-col> -->
+        <shadcn-col sm="12" md="4" class="my-1">
+          <shadcn-form-group
             label="Per page"
             label-for="per-page-select"
             label-cols-sm="6"
@@ -40,28 +40,28 @@
             label-size="sm"
             class="mb-0"
           >
-            <b-form-select
+            <shadcn-form-select
               id="per-page-select"
               v-model="perPage"
               :options="pageOptions"
               size="sm"
-            ></b-form-select>
-          </b-form-group>
-        </b-col>
+            ></shadcn-form-select>
+          </shadcn-form-group>
+        </shadcn-col>
 
-        <b-col sm="12" md="8" class="my-1">
-          <b-pagination
+        <shadcn-col sm="12" md="8" class="my-1">
+          <shadcn-pagination
             v-model="currentPage"
             :total-rows="this.filteredItems.length"
             :per-page="perPage"
             align="fill"
             size="sm"
             class="my-0"
-          ></b-pagination>
-        </b-col>
+          ></shadcn-pagination>
+        </shadcn-col>
       </template>
-    </b-row>
-    <b-table
+    </shadcn-row>
+    <shadcn-table
      responsive
       :items="filteredItems"
       :fields="fields"
@@ -78,12 +78,12 @@
       @filtered="onFiltered"
     >
       <template #cell(state)="row">
-        <b-badge v-if="stateMap['ok'].includes(row.item.state)" variant="success">O</b-badge>
-        <b-badge v-if="stateMap['pending'].includes(row.item.state)" variant="warning">P</b-badge>
-        <b-badge v-if="stateMap['stop'].includes(row.item.state)" variant="danger">S</b-badge>
+        <shadcn-badge v-if="stateMap['ok'].includes(row.item.state)" variant="success">O</shadcn-badge>
+        <shadcn-badge v-if="stateMap['pending'].includes(row.item.state)" variant="warning">P</shadcn-badge>
+        <shadcn-badge v-if="stateMap['stop'].includes(row.item.state)" variant="danger">S</shadcn-badge>
       </template>
       <template #cell(actions)="row">
-        <b-button
+        <shadcn-button
           v-if="row.item.actions.edit ? row.item.actions.edit.show : false"
           variant="primary"
           size="sm"
@@ -91,8 +91,8 @@
           class="mr-1"
         >
           {{ row.item.actions.edit ? row.item.actions.edit.name : "Edit" }}
-        </b-button>
-        <b-button
+        </shadcn-button>
+        <shadcn-button
           v-if="row.item.actions.delete ? row.item.actions.delete.show : false"
           variant="danger"
           @click="deleteItem(row.item)"
@@ -101,8 +101,8 @@
           {{
             row.item.actions.delete ? row.item.actions.delete.name : "Delete"
           }}
-        </b-button>
-        <b-button
+        </shadcn-button>
+        <shadcn-button
           v-if="row.item.actions.show ? row.item.actions.show.show : false"
           variant="secondary"
           size="sm"
@@ -110,10 +110,10 @@
           class="mr-1"
         >
           {{ row.item.actions.show ? row.item.actions.show.name : "Show" }}
-        </b-button>
+        </shadcn-button>
       </template>
-    </b-table>
-    <b-row> </b-row>
+    </shadcn-table>
+    <shadcn-row> </shadcn-row>
   </div>
 </template>
 
