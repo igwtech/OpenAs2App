@@ -11,20 +11,31 @@
 </v-app>
 </template>
 
-<script>
-import { mapState } from 'vuex';
-import LoginScreen from './components/LoginScreen'
-import AdminLayout from './components/AdminLayout'
-export default {
+<script lang="ts">
+import { defineComponent, computed } from 'vue';
+import { useStore } from 'vuex';
+import LoginScreen from './components/LoginScreen';
+import AdminLayout from './components/AdminLayout';
+
+export default defineComponent({
   name: 'app',
   components: {
     LoginScreen,
     AdminLayout
   },
-  computed: mapState({
-      is_logged: state =>  { console.log('is_logged',state); return (state.username !=null && state.password !=null && state.server !=null) }
-  }),  
-}
+  setup() {
+    const store = useStore();
+    const is_logged = computed(() => {
+      const state = store.state;
+      console.log('is_logged', state);
+      return state.username != null && state.password != null && state.server != null;
+    });
+
+    return {
+      is_logged
+    };
+  }
+});
 </script>
 
 <style>
