@@ -61,169 +61,163 @@ as2-from = PAEBSA_OLD
     </b-card>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, ref, computed, onMounted } from 'vue';
 import TableCustom from "./TableCustom";
 import Utils from "../utils";
 import Swal from "sweetalert2";
-var _ = require("lodash");
-export default {
-  data: function () {
-    return {
-      breadcrumbs: [
-        {
-          text: "Dashboard",
-          to: { name: "Dashboard" },
-          active: false,
-        },
-        {
-          text: "Messages",
-          to: { name: "Messages" },
-          active: false,
-        },
-        {
-          text: "Message Detail",
-          to: { name: "MessagesDetail" },
-          active: true,
-        },
-      ],
-      schema: {
-        fields: [
-          {
-            type: "text",
-            name: "name",
-            label: "Message ID",
-            placeholder: "Trading Message's Unique Key Name",
-            _validate: {
-              required: true,
-            },
-          },
-          {
-            type: "text",
-            name: "as2_id",
-            label: "AS2 ID",
-            placeholder: "Trading Message's AS2 ID",
-            _validate: {
-              required: true,
-            },
-          },
-          {
-            type: "email",
-            name: "email",
-            label: "Email",
-            placeholder: "Trading Message's Email Address",
-            _validate: {
-              required: true,
-              email: true,
-            },
-          },
-          {
-            type: "select",
-            name: "x509_alias",
-            label: "Certificate Alias",
-            // placeholder: "X.509 Certificate Alias on the KeyStore",
-            _validate: {
-              required: true,
-            },
-            list: [],
-          },
-        ],
-      },
-      fields: [
-        {
-          key: "key",
-          label: "#",
-          sortable: true,
-          class: "text-center",
-        },
-        {
-          key: "date",
-          label: "Date",
-          sortable: true,
-          class: "text-center",
-        },
-        {
-          key: "security",
-          label: "Security",
-          sortable: true,
-          class: "text-center",
-        },
-        {
-          key: "sender",
-          label: "Sender",
-          sortable: true,
-          class: "text-center",
-        },
-        {
-          key: "server",
-          label: "Server",
-          sortable: true,
-          class: "text-center",
-        },
+import _ from "lodash";
 
-        // { key: "actions", label: "Actions", class: "text-center" },
-      ],
-      infoModal: {
-        id: "info-modal",
-        title: "",
-      },
-      items: [],
-      items2: [
-        {
-          date: "04/04/2022",
-          security: "Unknown/Unknown",
-          sender: "192.15.15.1",
-          server: "Lorem AS2 2022 BULID 538- www.hola.com",
-        },
-        {
-          date: "04/04/2022",
-          security: "Unknown/Unknown",
-          sender: "192.15.15.1",
-          server: "Lorem AS2 2022 BULID 538- www.hola.com",
-        },
-        {
-          date: "04/04/2022",
-          security: "Unknown/Unknown",
-          sender: "192.15.15.1",
-          server: "Lorem AS2 2022 BULID 538- www.hola.com",
-        },
-      ],
-      item: {
-        _id: null,
-        name: "",
-        as2_id: "",
-        email: "",
-        x509_alias: "",
-      },
-    };
-  },
+export default defineComponent({
   components: {
     TableCustom,
   },
-  computed: {
-    isPathMessageList() {
-      return this.$route.name == "Messages";
-    },
-  },
-  async mounted() {
-    var list = await Utils.Crud.getList("cert");
-    this.schema.fields[3].list = _.map(list, (item) => {
-      return { value: item, text: item };
+  setup() {
+    const breadcrumbs = ref([
+      {
+        text: "Dashboard",
+        to: { name: "Dashboard" },
+        active: false,
+      },
+      {
+        text: "Messages",
+        to: { name: "Messages" },
+        active: false,
+      },
+      {
+        text: "Message Detail",
+        to: { name: "MessagesDetail" },
+        active: true,
+      },
+    ]);
+
+    const schema = ref({
+      fields: [
+        {
+          type: "text",
+          name: "name",
+          label: "Message ID",
+          placeholder: "Trading Message's Unique Key Name",
+          _validate: {
+            required: true,
+          },
+        },
+        {
+          type: "text",
+          name: "as2_id",
+          label: "AS2 ID",
+          placeholder: "Trading Message's AS2 ID",
+          _validate: {
+            required: true,
+          },
+        },
+        {
+          type: "email",
+          name: "email",
+          label: "Email",
+          placeholder: "Trading Message's Email Address",
+          _validate: {
+            required: true,
+            email: true,
+          },
+        },
+        {
+          type: "select",
+          name: "x509_alias",
+          label: "Certificate Alias",
+          _validate: {
+            required: true,
+          },
+          list: [] as any[],
+        },
+      ],
     });
-    await this.getList();
-  },
-  methods: {
-    resetModal: function () {
-      this.infoModal.title = "";
-      this.item = {
+
+    const fields = ref([
+      {
+        key: "key",
+        label: "#",
+        sortable: true,
+        class: "text-center",
+      },
+      {
+        key: "date",
+        label: "Date",
+        sortable: true,
+        class: "text-center",
+      },
+      {
+        key: "security",
+        label: "Security",
+        sortable: true,
+        class: "text-center",
+      },
+      {
+        key: "sender",
+        label: "Sender",
+        sortable: true,
+        class: "text-center",
+      },
+      {
+        key: "server",
+        label: "Server",
+        sortable: true,
+        class: "text-center",
+      },
+    ]);
+
+    const infoModal = ref({
+      id: "info-modal",
+      title: "",
+    });
+
+    const items = ref<any[]>([]);
+    const items2 = ref([
+      {
+        date: "04/04/2022",
+        security: "Unknown/Unknown",
+        sender: "192.15.15.1",
+        server: "Lorem AS2 2022 BULID 538- www.hola.com",
+      },
+      {
+        date: "04/04/2022",
+        security: "Unknown/Unknown",
+        sender: "192.15.15.1",
+        server: "Lorem AS2 2022 BULID 538- www.hola.com",
+      },
+      {
+        date: "04/04/2022",
+        security: "Unknown/Unknown",
+        sender: "192.15.15.1",
+        server: "Lorem AS2 2022 BULID 538- www.hola.com",
+      },
+    ]);
+
+    const item = ref({
+      _id: null,
+      name: "",
+      as2_id: "",
+      email: "",
+      x509_alias: "",
+    });
+
+    const isPathMessageList = computed(() => {
+      return this.$route.name == "Messages";
+    });
+
+    const resetModal = () => {
+      infoModal.value.title = "";
+      item.value = {
         _id: null,
         name: "",
         as2_id: "",
         email: "",
         x509_alias: "",
       };
-      this.$root.$emit("bv::hide::modal", this.infoModal.id);
-    },
-    deleteObject: async function (item) {
+      this.$root.$emit("bv::hide::modal", infoModal.value.id);
+    };
+
+    const deleteObject = async (item: any) => {
       try {
         Swal.fire({
           title: "Are you sure to delete?",
@@ -235,9 +229,9 @@ export default {
         }).then(async (result) => {
           if (result.isConfirmed) {
             Utils.Crud.deleteObject("partner", item.key)
-              .then((response) => {
+              .then(() => {
                 Swal.fire("Deleted!", "", "success");
-                this.getList();
+                getList();
               })
               .catch((e) => {
                 console.log("delete parner", e);
@@ -249,57 +243,85 @@ export default {
         console.log(e);
         Swal.fire("Error!", e, "error");
       }
-    },
-    newObject: function () {
-      this.infoModal.title = "New partner";
-      this.item = {
+    };
+
+    const newObject = () => {
+      infoModal.value.title = "New partner";
+      item.value = {
         _id: null,
         name: "",
         as2_id: "",
         email: "",
         x509_alias: "",
       };
-      this.$root.$emit("bv::show::modal", this.infoModal.id);
-    },
-    editObject: async function (_item) {
-      this.infoModal.title = "Message Edit";
-      var newObj = this.getNewObject();
+      this.$root.$emit("bv::show::modal", infoModal.value.id);
+    };
+
+    const editObject = async (_item: any) => {
+      infoModal.value.title = "Message Edit";
+      const newObj = getNewObject();
       const result = await Utils.Crud.getObject("partner", _item.key, newObj);
-      console.log("resutl", result);
-      this.item = Object.assign(this.item, result);
-      this.$root.$emit("bv::show::modal", this.infoModal.id);
-    },
-    getNewObject: function () {
-      var obj = { _id: null };
-      this.schema.fields.forEach((f) => (obj[f.name] = f.value));
+      item.value = Object.assign(item.value, result);
+      this.$root.$emit("bv::show::modal", infoModal.value.id);
+    };
+
+    const getNewObject = () => {
+      const obj: any = { _id: null };
+      schema.value.fields.forEach((f) => (obj[f.name] = f.value));
       return obj;
-    },
-    getList: async function () {
-      this.items = await Utils.Crud.getList("partner").then((results) => {
+    };
+
+    const getList = async () => {
+      items.value = await Utils.Crud.getList("partner").then((results) => {
         return _.map(results, (item, index) => {
           return {
             key: index,
             name: item,
             actions: {
               detail: { name: "Detail", show: true },
-              // delete:{name:"Delete",show:true},
             },
           };
         });
       });
-    },
-    saveObject: async function (data) {
-      console.log(data);
+    };
+
+    const saveObject = async (data: any) => {
       try {
         await Utils.Crud.saveObject("partner", data);
-        this.resetModal();
-        await this.getList();
+        resetModal();
+        await getList();
       } catch (e) {
         Swal.fire("Error!", e, "error");
       }
-    },
+    };
+
+    onMounted(async () => {
+      const list = await Utils.Crud.getList("cert");
+      schema.value.fields[3].list = _.map(list, (item) => {
+        return { value: item, text: item };
+      });
+      await getList();
+    });
+
+    return {
+      breadcrumbs,
+      schema,
+      fields,
+      infoModal,
+      items,
+      items2,
+      item,
+      isPathMessageList,
+      resetModal,
+      deleteObject,
+      newObject,
+      editObject,
+      getNewObject,
+      getList,
+      saveObject,
+    };
   },
-};
+});
 </script>
 <style >
 </style>
