@@ -34,9 +34,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import TopMenu from "./TopMenu";
-import TopMenuPhone from "./TopMenuPhone";
-import SideMenu from "./SideMenu";
+import TopMenu from './TopMenu.vue';
+import SideMenu from './SideMenu.vue';
+import TopMenuPhone from './TopMenuPhone.vue';
 
 export default defineComponent({
   name: "admin-layout",

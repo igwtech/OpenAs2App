@@ -50,8 +50,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue';
-import FormCustom from "./FormCustom";
-import TableCustom from "./TableCustom";
+import FormCustom from "./FormCustom.vue";
+import TableCustom from "./TableCustom.vue";
 import Utils from "../utils";
 import Swal from "sweetalert2";
 import _ from "lodash";
@@ -196,7 +196,7 @@ export default defineComponent({
             loadingTable.value = false;
           }
         });
-      } catch (e) {
+      } catch (e:any) {
         console.log(e);
         Swal.fire("Error!", e, "error");
         loadingTable.value = false;
@@ -227,13 +227,13 @@ export default defineComponent({
 
     const getNewObject = () => {
       const obj: any = { _id: null };
-      schema.value.fields.forEach((f) => (obj[f.name] = f.value));
+      schema.value.fields.forEach((f) => (obj[f.name] = f.placeholder));
       return obj;
     };
 
     const getList = async () => {
-      items.value = await Utils.Crud.getList("partner").then((results) => {
-        return _.map(results, (item, index) => {
+      items.value = await Utils.Crud.getList("partner").then((results:any) => {
+        return _.map(results, (item:any, index:any) => {
           return {
             key: index,
             name: item,
@@ -255,7 +255,7 @@ export default defineComponent({
         });
         resetModal();
         await getList();
-      } catch (e) {
+      } catch (e:any) {
         Swal.fire("Error!", e, "error");
         loadingForm.value = false;
       }
@@ -263,7 +263,7 @@ export default defineComponent({
 
     onMounted(async () => {
       const list = await Utils.Crud.getList("cert");
-      schema.value.fields[3].list = _.map(list, (item) => {
+      schema.value.fields[3].list = _.map(list, (item:any) => {
         return { value: item, text: item };
       });
       await getList();

@@ -44,7 +44,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed, PropType } from 'vue';
-import store from "../store";
+import {store} from "../store/index";
 import router from "../routes";
 
 export default defineComponent({
@@ -81,7 +81,7 @@ export default defineComponent({
     });
 
     const abbreviationName = computed(() => {
-      return store.state.username.substr(0, 2).toUpperCase();
+      return store.state.username?.substr(0, 2).toUpperCase();
     });
 
     const logout = (e: Event) => {

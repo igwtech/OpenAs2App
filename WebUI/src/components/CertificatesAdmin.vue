@@ -74,9 +74,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue';
-import FormCustom from "./FormCustom";
-import TableCustom from "./TableCustom";
-import CertificateEditor from "./CertificateEditor";
+import FormCustom from "./FormCustom.vue";
+import TableCustom from "./TableCustom.vue";
+import CertificateEditor from "./CertificateEditor.vue";
 import Utils from "../utils";
 import Swal from "sweetalert2";
 import _ from "lodash";

@@ -29,7 +29,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import store from '../store';
+import {store} from '../store/index';
 import axios from 'axios';
 
 export default defineComponent({
@@ -44,7 +44,7 @@ export default defineComponent({
     const errored = ref(false);
 
     const login = (e: Event) => {
-      errormsg.value = null;
+      errormsg.value = '';
       errored.value = false;
       console.log(e);
       const credentials = btoa(`${username.value}:${password.value}`);

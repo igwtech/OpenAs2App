@@ -12,8 +12,8 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import { useStore } from 'vuex';
-import LoginScreen from './components/LoginScreen';
-import AdminLayout from './components/AdminLayout';
+import LoginScreen from './components/LoginScreen.vue';
+import AdminLayout from './components/AdminLayout.vue';
 
 export default defineComponent({
   name: 'app',

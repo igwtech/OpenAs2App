@@ -137,3 +137,31 @@
   }
 }
 </style>
+<script lang="ts">
+import { defineComponent ,ref} from 'vue'
+
+export default defineComponent({
+  setup() {
+    const breadcrumbs = ref(null);
+    const countPartners= ref(0);
+    const countPartnerships = ref(0);
+    const countCertificates = ref(0);
+    const changeDate = ref(null);
+    const dataChart = ref();
+    const dateRange = ref(null);
+    const allState = ref(null);
+    const states = ref([]);
+    return {
+      breadcrumbs,
+      countPartners,
+      countPartnerships,
+      countCertificates,
+      changeDate,
+      dataChart,
+      dateRange,
+      allState,
+      states
+    }
+  },
+})
+</script>

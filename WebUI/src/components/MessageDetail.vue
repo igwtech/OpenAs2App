@@ -63,7 +63,7 @@ as2-from = PAEBSA_OLD
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue';
-import TableCustom from "./TableCustom";
+import TableCustom from "./TableCustom.vue";
 import Utils from "../utils";
 import Swal from "sweetalert2";
 import _ from "lodash";

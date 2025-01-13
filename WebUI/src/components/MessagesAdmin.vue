@@ -74,9 +74,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue';
-import FormCustom from "./FormCustom";
-import TableCustomMessage from "./TableCustomMessage";
-import FilterMessageTable from "./FilterMessageTable";
+import FormCustom from "./FormCustom.vue";
+import TableCustomMessage from "./TableCustomMessage.vue";
+import FilterMessageTable from "./FilterMessageTable.vue";
 import Utils from "../utils";
 import Swal from "sweetalert2";
 import _ from "lodash";
