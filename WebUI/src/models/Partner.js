@@ -1,10 +1,13 @@
-class Partner  {
-    _id = null;
-    name= null;
-    as2_id=null;
-    email=null;
-    x509_alias=null;
-    fields= {
+class Partner {
+    constructor(data = {}) {
+        this._id = data._id ?? null;
+        this.name = data.name ?? null;
+        this.as2_id = data.as2_id ?? null;
+        this.email = data.email ?? null;
+        this.x509_alias = data.x509_alias ?? null;
+    }
+
+    static fields = {
         _id: {
             type: String,
             required: true,
@@ -27,17 +30,5 @@ class Partner  {
             default: null
         }
     };
-    constructor(data) {
-        this._id = data._id??null;
-        this.name = data.name??null;
-        this.as2_id = data.as2_id??null;
-        this.email =data.email??null;
-        this.x509_alias = data.x509_alias??null;
-        
-    }
-    
-
-    
-    
 }
 export default Partner;
