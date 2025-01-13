@@ -21,11 +21,6 @@ export default {
     LoginScreen,
     AdminLayout
   },
-  data: function() {
-    return { 
-      rememberme:false 
-    }
-  },
   computed: mapState({
       is_logged: state =>  { console.log('is_logged',state); return (state.username !=null && state.password !=null && state.server !=null) }
   }),  
