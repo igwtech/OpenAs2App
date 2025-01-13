@@ -60,46 +60,50 @@
         </form>
     </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent, ref, PropType } from 'vue';
 
-export default {
-    data: function() {
-        return {
-            data: null
-        }
+export default defineComponent({
+  props: {
+    model: {
+      type: Object as PropType<Promise<Record<string, any>>>,
+      required: true,
     },
-    props: {
-        model: {
-            type: Promise,
-            required: true
-        },
-        schema: {
-            type: Object,
-            required: true
-        },
-        title: {
-            type: String,
-            required: false
-        }
+    schema: {
+      type: Object as PropType<{ fields: any[] }>,
+      required: true,
     },
-    mounted: function() {
-        console.log(this.model);
-        this.model.then((e)=>this.data=e);
+    title: {
+      type: String,
+      required: false,
     },
-    methods: {
-        submitForm: function(e) {
-            console.log('submitForm',e);
-            e.preventDefault();
-            this.$emit('commit',this.data);
-        },
-        deleteForm: function(e) {
-            console.log('submitForm',e);
-            e.preventDefault();
-            this.$emit('delete',this.data._id);
-        },
-        cancelForm: function(e) {
-            this.$emit('revert',this.data._id);
-        }
-    }
-}
+  },
+  setup(props, { emit }) {
+    const data = ref<Record<string, any> | null>(null);
+
+    props.model.then((e) => (data.value = e));
+
+    const submitForm = (e: Event) => {
+      e.preventDefault();
+      emit('commit', data.value);
+    };
+
+    const deleteForm = (e: Event) => {
+      e.preventDefault();
+      emit('delete', data.value?._id);
+    };
+
+    const cancelForm = (e: Event) => {
+      emit('revert', data.value?._id);
+    };
+
+    return {
+      data,
+      submitForm,
+      deleteForm,
+      cancelForm,
+    };
+  },
+});
+
 </script>
