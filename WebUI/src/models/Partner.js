@@ -1,5 +1,19 @@
+interface PartnerData {
+    _id?: string | null;
+    name?: string | null;
+    as2_id?: string | null;
+    email?: string | null;
+    x509_alias?: string | null;
+}
+
 class Partner {
-    constructor(data = {}) {
+    _id: string | null;
+    name: string | null;
+    as2_id: string | null;
+    email: string | null;
+    x509_alias: string | null;
+
+    constructor(data: PartnerData = {}) {
         this._id = data._id ?? null;
         this.name = data.name ?? null;
         this.as2_id = data.as2_id ?? null;
@@ -31,4 +45,5 @@ class Partner {
         }
     };
 }
+
 export default Partner;
