@@ -61,10 +61,10 @@
             :aria-describedby="ariaDescribedby"
             name="dateTime"
             :value="item.value"
-            >{{ item.text }}</b-form-radio
+            >{{ item.text }}</shadcn-form-radio
           >
-        </b-form-group>
-      </b-col>
+        </shadcn-form-group>
+      </shadcn-col>
       <!-- <b-col sm="1" md="1" lg="1">
           <b-button variant="primary">
               <b-icon icon="arrow-repeat"></b-icon>
