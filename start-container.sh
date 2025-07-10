@@ -6,21 +6,22 @@ if [ $(tput colors) -ge 8 ]; then
     NORMAL=$(tput sgr0)
 fi
 echo_warn() {
-    echo "${RED}${1}${NORMAL}"
+    echo "${RED}${1}${NORMAL}"  > /dev/stderr
 }
 echo_ok() {
-    echo "${GREEN}${1}${NORMAL}"
+    echo "${GREEN}${1}${NORMAL}"  > /dev/stderr
 }
 if [ ! -e $OPENAS2_BASE/config/config.xml ]
     then
         echo_warn "The config folder is empty, it will be populated by the template..."
         cp -a $OPENAS2_BASE/config_template/* $OPENAS2_BASE/config/                
-        echo_ok "Done!"
+        echo_ok "Done!" 
 fi
+echo_ok "Checking for properties file..." 
 if [ ! -e $OPENAS2_PROPERTIES_FILE ]
     then
     echo_warn "Missing properties file" 
-    echo_ok "Processing Environment Variables into properties"    
+    echo_ok "Processing Environment Variables into properties"
     # Define the prefix for matching environment variables
     prefix="OPENAS2PROP_"
 
@@ -43,11 +44,12 @@ if [ ! -e $OPENAS2_PROPERTIES_FILE ]
 
     # Extract the value of the environment variable
     value=$( eval "echo \"\$$env_var\"" )
-    echo "${GREEN}$modified_name=${NORMAL}${value}"
+    echo_ok "$modified_name=${NORMAL}${value}"
     # Construct the properties command-line argument
     echo "${modified_name}=${value}" >> $OPENAS2_PROPERTIES_FILE
     done
-
+else
+    echo_ok "Propeties file '$OPENAS2_PROPERTIES_FILE' found!"
 fi
 # Start OpenAS2 in foreground
 $(dirname $0)/start-openas2.sh

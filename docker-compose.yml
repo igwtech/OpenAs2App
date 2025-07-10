@@ -1,25 +1,36 @@
+##
+## Create your .env file with definitions for:
+## HOST_WEBUI_PORT - Port on which NGINX will listen for Admin Web
+## HOST_RESTAPI_PORT - Port on which OpenAS2 will expose the Rest API
+## HOST_AS2_PORT - Port on which OpenAS2 will listen for AS2 Messages
+## HOST_AS2MDN_PORT - Port on which OpenAS2 will listen for MDN Messages
 services:
+  # Base Server
   openas2:
+    image: greicodex/openas2
     build:
+      
       context: .
       dockerfile: Dockerfile
     ports:
-      - 4080:10080
-      - 4081:10081
+      - ${HOST_AS2_PORT:-4080}:10080
+      - ${HOST_AS2MDN_PORT:-4081}:10081
       - ${HOST_RESTAPI_PORT:-8443}:8080
     environment:
       - OPENAS2PROP_RESTAPI__COMMAND__PROCESSOR__BASEURI=http://0.0.0.0:8080
       - OPENAS2PROP_RESTAPI__COMMAND__PROCESSOR__USERID=userID
       - OPENAS2PROP_RESTAPI__COMMAND__PROCESSOR__PASSWORD=pWd
       - OPENAS2PROP_RESTAPI__COMMAND__PROCESSOR__ENABLED=true
+      - OPENAS2PROP_FILE__LOGGER__FILENAME=/dev/stderr
+      - OPENAS2PROP_MESSAGES_ENABLED=true
     tty: true
     stdin_open: true
     volumes:
       - ./config:/opt/openas2/config:rw
       - ./data:/opt/openas2/data:rw
-
-
+  # Web UI
   openas2_webui:
+    image: greicodex/openas2-ui
     build:
       context: .
       dockerfile: Dockerfile_WebUI
