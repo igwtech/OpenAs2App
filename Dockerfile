@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11.0.22_7-jdk-jammy AS builder
+FROM eclipse-temurin:24.0.1_9-jdk-jammy AS builder
 COPY . /usr/src/openas2
 WORKDIR /usr/src/openas2
 # To test Locally builder environment:
