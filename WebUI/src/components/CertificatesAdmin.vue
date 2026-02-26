@@ -76,7 +76,6 @@
 import FormCustom from "./FormCustom";
 import TableCustom from "./TableCustom";
 import CertificateEditor from "./CertificateEditor";
-
 import Utils from "../utils";
 import Swal from "sweetalert2";
 var _ = require("lodash");
@@ -380,11 +379,12 @@ export default {
     },
     fileUpload: function ({ file, e }) {
       var oFile = file;
-      var ext = file.name
-        .substring(file.name.lastIndexOf(".") + 1)
-        .toLowerCase();
-      if (ext != "pem") {
-        Swal.fire("Error!", "Error invalid file-type", "error");
+      console.log(file);
+       // filter for certificate files
+       var rFilter = /\.(pem)$/i;
+       var fileName = oFile.name;
+       if (!rFilter.test(fileName)) {
+        alert("Error invalid file-type");
         return;
       }
       // if (!rFilter.test(oFile.type)) {
@@ -399,13 +399,18 @@ export default {
       var that = this;
       oReader.onload = function (e) {
         var PEM = e.target.result;
-        PEM = PEM.replace("-----BEGIN CERTIFICATE-----", "").replace(
-          "-----END CERTIFICATE-----",
-          ""
-        );
-        PEM = PEM.replace(/[^A-Za-z0-9+/=]+/gm, "");
-        that.item.data = PEM;
-        that.changedCert();
+        try {
+           PEM = PEM.replace("-----BEGIN CERTIFICATE-----", "").replace(
+            "-----END CERTIFICATE-----","");
+            PEM = PEM.replace(/[^A-Za-z0-9+/=]+/gm, "");
+            that.item.data = PEM;
+            that.changedCert();
+            console.log("Read certificate successfully")
+        } catch (ex) {
+            console.log("Error reading certificate", ex)
+            alert("Error reading certificate");
+            return;
+        }
       };
       oReader.readAsText(oFile);
     },
