@@ -45,34 +45,6 @@ public class FileUtil {
         return filename.substring(filename.lastIndexOf(".") + 1);
     }
 
-    public static Properties loadProperties(String filename) throws IOException {
-        Properties fileProps = new java.util.Properties();
-        FileInputStream fis = null;
-        fis = new FileInputStream(filename);
-        try {
-            fileProps.load(fis);
-        } finally {
-            if (fis != null) {
-                    fis.close();
-            }
-        }
-        return fileProps;
-    }
-
-    /** Attempts to extract the filename extension by searching for the last occurrence
-     *  of a period and returning all characters following that period.
-     *  If no period is found then it returns null.
-     * @param filename - the full name of the file including extension
-     * @return the extension of the filename excluding the period
-     */
-    public static String getFilenameExtension(String filename) {
-        int period_index = filename.lastIndexOf(".");
-        if (period_index == -1) {
-            return null;
-        }
-        return filename.substring(filename.lastIndexOf(".") + 1);
-    }
-
     public static void splitLineBasedFile(File sourceFile, String outputDir, long maxFileSize, boolean containsHeaderRow, String newFileBaseName, String filenamePrefix) throws OpenAS2Exception {
         FileReader fileReader;
         try {
