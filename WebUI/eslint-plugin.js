@@ -1,1 +1,0 @@
-this.CliEngine = require(this.basicPath).CLIEngine;
