@@ -171,7 +171,7 @@
 			<dependency>
 			    <groupId>jakarta.ws.rs</groupId>
 			    <artifactId>jakarta.ws.rs-api</artifactId>
-			    <version>[3]</version>
+			    <version>3.1.0</version>
 			</dependency>
 			<dependency>
 			    <groupId>jakarta.annotation</groupId>

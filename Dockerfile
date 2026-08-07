@@ -1,4 +1,4 @@
-FROM eclipse-temurin:24.0.1_9-jdk-jammy AS builder
+FROM eclipse-temurin:24.0.1_9-jdk-noble AS builder
 COPY . /usr/src/openas2
 WORKDIR /usr/src/openas2
 # To test Locally builder environment:
@@ -18,7 +18,7 @@ RUN cd /usr/src/openas2/Runtime/bin && \
     mv config config_template
 
 
-FROM eclipse-temurin:11.0.22_7-jre-jammy
+FROM eclipse-temurin:24.0.1_9-jre-noble
 ENV OPENAS2_BASE=/opt/openas2
 ENV OPENAS2_HOME=/opt/openas2
 ENV OPENAS2_TMPDIR=/opt/openas2/temp
